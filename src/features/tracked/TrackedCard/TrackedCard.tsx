@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Card, CardContent, Typography, Box, Avatar, IconButton, Button } from '@mui/material'
+import { Card, CardContent, Typography, Box, Avatar, IconButton, Button, Skeleton } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove'
 import { useDispatch } from 'react-redux'
@@ -12,23 +11,14 @@ import styles from './TrackedCard.module.css'
 
 interface TrackedCardProps {
   initialRepo: GithubRepo
-  isRefreshingAll?: boolean
 }
 
-function TrackedCard({ initialRepo, isRefreshingAll }: TrackedCardProps) {
+function TrackedCard({ initialRepo }: TrackedCardProps) {
   const dispatch = useDispatch<AppDispatch>()
-  const { data, isError, refetch } = useGetRepoByFullNameQuery(initialRepo.full_name)
-  const [spinning, setSpinning] = useState(false)
+  const { data, isFetching, isError, refetch } = useGetRepoByFullNameQuery(initialRepo.full_name)
 
   const repo = data || initialRepo
-  const isSpinning = spinning || isRefreshingAll
   const commitDate = repo.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
-
-  const handleRefresh = async () => {
-    setSpinning(true)
-    await refetch()
-    setTimeout(() => setSpinning(false), 700)
-  }
 
   return (
     <Card className={styles.card} variant="outlined">
@@ -40,8 +30,8 @@ function TrackedCard({ initialRepo, isRefreshingAll }: TrackedCardProps) {
               {repo.full_name}
             </Typography>
           </Box>
-          <IconButton size="small" onClick={handleRefresh} disabled={isSpinning}>
-            <RefreshIcon fontSize="small" className={isSpinning ? styles.spinning : ''} />
+          <IconButton size="small" onClick={() => refetch()} disabled={isFetching}>
+            <RefreshIcon fontSize="small" className={isFetching ? styles.spinning : ''} />
           </IconButton>
         </Box>
 
@@ -50,14 +40,21 @@ function TrackedCard({ initialRepo, isRefreshingAll }: TrackedCardProps) {
             Failed to refresh latest stats
           </Typography>
         )}
+
         <Typography variant="body2" color="text.secondary" className={styles.description}>
           {repo.description || 'No description provided'}
         </Typography>
+
         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
           Last commit: {commitDate}
         </Typography>
+
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1.5 }}>
-          <RepoStatsRow stars={repo.stargazers_count} openIssues={repo.open_issues_count} forks={repo.forks_count} />
+          {isFetching ? (
+            <Skeleton variant="text" width="6rem" />
+          ) : (
+            <RepoStatsRow stars={repo.stargazers_count} openIssues={repo.open_issues_count} forks={repo.forks_count} />
+          )}
 
           <Button
             size="small"
