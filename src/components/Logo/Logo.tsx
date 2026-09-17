@@ -3,19 +3,19 @@ import RadarIcon from '@mui/icons-material/Radar'
 
 function Logo() {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexShrink: 0 }}>
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '2.25rem',
-          height: '2.25rem',
-          borderRadius: '0.6rem',
+          width: { xs: '1.85rem', sm: '2.25rem' },
+          height: { xs: '1.85rem', sm: '2.25rem' },
+          borderRadius: '0.5rem',
           bgcolor: 'primary.main',
         }}
       >
-        <RadarIcon sx={{ fontSize: '1.4rem', color: '#ffffff' }} />
+        <RadarIcon sx={{ fontSize: { xs: '1.15rem', sm: '1.4rem' }, color: '#ffffff' }} />
       </Box>
 
       <Typography
@@ -25,6 +25,7 @@ function Logo() {
           fontWeight: 800,
           letterSpacing: '-0.03em',
           color: 'var(--color-text-primary)',
+          display: { xs: 'none', sm: 'inline' },
         }}
       >
         Repo

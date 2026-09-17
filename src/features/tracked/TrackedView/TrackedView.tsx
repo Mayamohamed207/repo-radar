@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import type { RootState, AppDispatch } from '../../../store/store'
 import { githubApi } from '../../../api/githubApi'
 import TrackedCard from '../TrackedCard/TrackedCard'
+import StarsChart from '../StarsChart/StarsChart'
 import styles from './TrackedView.module.css'
 
 function TrackedView() {
@@ -28,10 +29,24 @@ function TrackedView() {
   if (trackedRepos.length === 0) {
     return (
       <Box className={styles.empty}>
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+        <Typography
+          sx={{
+            fontWeight: 800,
+            fontSize: { xs: '1.4rem', sm: '1.75rem' },
+            letterSpacing: '-0.02em',
+          }}
+        >
           No repositories tracked yet
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+        <Typography
+          color="text.secondary"
+          sx={{
+            mt: 1,
+            fontSize: { xs: '1rem', sm: '1.1rem' },
+            maxWidth: '26rem',
+            lineHeight: 1.5,
+          }}
+        >
           Search for GitHub repositories above and click "Track" to monitor them here.
         </Typography>
       </Box>
@@ -61,6 +76,8 @@ function TrackedView() {
           Refresh All
         </Button>
       </Box>
+
+      <StarsChart repos={trackedRepos} />
 
       <Grid container spacing={2}>
         {trackedRepos.map((repo) => (
