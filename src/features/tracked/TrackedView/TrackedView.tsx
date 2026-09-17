@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import type { RootState, AppDispatch } from '../../../store/store'
 import { githubApi } from '../../../api/githubApi'
 import TrackedCard from '../TrackedCard/TrackedCard'
-import StarsChart from '../StarsChart/StarsChart'
+import ChartsContainer from '../Charts/ChartsContainer'
 import styles from './TrackedView.module.css'
 
 function TrackedView() {
@@ -77,7 +77,7 @@ function TrackedView() {
         </Button>
       </Box>
 
-      <StarsChart repos={trackedRepos} />
+      <ChartsContainer repos={trackedRepos} />
 
       <Grid container spacing={2}>
         {trackedRepos.map((repo) => (
