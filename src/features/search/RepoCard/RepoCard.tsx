@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react'
 import { Card, CardContent, Typography, Box, Avatar, Button } from '@mui/material'
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined'
 import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove'
@@ -18,7 +19,12 @@ function RepoCard({ repo }: RepoCardProps) {
 
   const commitDate = repo.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
 
-  const handleToggleTrack = () => {
+  const handleOpenRepo = () => {
+    window.open(repo.html_url, '_blank', 'noopener,noreferrer')
+  }
+
+  const handleToggleTrack = (event: MouseEvent) => {
+    event.stopPropagation()
     if (isTracked) {
       dispatch(untrackRepo(repo.id))
     } else {
@@ -27,7 +33,7 @@ function RepoCard({ repo }: RepoCardProps) {
   }
 
   return (
-    <Card className={styles.card} variant="outlined">
+    <Card className={styles.card} variant="outlined" onClick={handleOpenRepo} sx={{ cursor: 'pointer' }}>
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>

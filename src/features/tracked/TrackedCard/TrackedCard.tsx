@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react'
 import { Card, CardContent, Typography, Box, Avatar, IconButton, Button, Skeleton } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove'
@@ -20,8 +21,27 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
 
   const commitDate = repo?.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
 
+  const handleOpenRepo = () => {
+    if (repo) window.open(repo.html_url, '_blank', 'noopener,noreferrer')
+  }
+
+  const handleRefresh = (event: MouseEvent) => {
+    event.stopPropagation()
+    refetch()
+  }
+
+  const handleUntrack = (event: MouseEvent) => {
+    event.stopPropagation()
+    dispatch(untrackRepo(repoRef.id))
+  }
+
   return (
-    <Card className={styles.card} variant="outlined">
+    <Card
+      className={styles.card}
+      variant="outlined"
+      onClick={handleOpenRepo}
+      sx={{ cursor: repo ? 'pointer' : 'default' }}
+    >
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
@@ -34,7 +54,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
               {repoRef.full_name}
             </Typography>
           </Box>
-          <IconButton size="small" onClick={() => refetch()} disabled={isFetching || isLoading}>
+          <IconButton size="small" onClick={handleRefresh} disabled={isFetching || isLoading}>
             <RefreshIcon fontSize="small" className={isFetching ? styles.spinning : ''} />
           </IconButton>
         </Box>
@@ -65,7 +85,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
             variant="outlined"
             color="error"
             startIcon={<BookmarkRemoveIcon />}
-            onClick={() => dispatch(untrackRepo(repoRef.id))}
+            onClick={handleUntrack}
             sx={{ textTransform: 'none' }}
           >
             Untrack
