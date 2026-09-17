@@ -1,6 +1,7 @@
 .navbar {
+  background-color: var(--color-surface) !important;
   border-bottom: 1px solid var(--color-border);
-  background-color: var(--color-surface);
+  color: var(--color-text-primary);
 }
 
 .toolbar {
