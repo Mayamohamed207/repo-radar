@@ -2,8 +2,12 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { GithubRepo } from '../../types/github'
 
 const loadStorage = (): GithubRepo[] => {
-  const data = localStorage.getItem('tracked_repos')
-  return data ? JSON.parse(data) : []
+  try {
+    const data = localStorage.getItem('tracked_repos')
+    return data ? JSON.parse(data) : []
+  } catch {
+    return []
+  }
 }
 
 interface TrackedState {
