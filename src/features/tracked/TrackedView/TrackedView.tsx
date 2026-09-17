@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Box, Typography, Button, Grid } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { useSelector, useDispatch } from 'react-redux'
@@ -7,13 +7,57 @@ import { githubApi } from '../../../api/githubApi'
 import { useTrackedRepoData } from '../../../hooks/useTrackedRepoData'
 import TrackedCard from '../TrackedCard/TrackedCard'
 import ChartsContainer from '../Charts/ChartsContainer'
+import SortSelect from '../../../components/SortSelect/SortSelect'
+import type { GithubRepo } from '../../../types/github'
 import styles from './TrackedView.module.css'
+
+type TrackedSort = 'stars' | 'forks' | 'issues' | 'updated'
+
+const SORT_OPTIONS = [
+  { value: 'stars', label: 'Stars' },
+  { value: 'forks', label: 'Forks' },
+  { value: 'issues', label: 'Open issues' },
+  { value: 'updated', label: 'Recently updated' },
+]
+
+function getSortValue(repo: GithubRepo, sort: TrackedSort): number {
+  switch (sort) {
+    case 'stars':
+      return repo.stargazers_count
+    case 'forks':
+      return repo.forks_count
+    case 'issues':
+      return repo.open_issues_count
+    case 'updated':
+      return new Date(repo.pushed_at).getTime()
+  }
+}
 
 function TrackedView() {
   const dispatch = useDispatch<AppDispatch>()
   const trackedRefs = useSelector((state: RootState) => state.tracked.repos)
   const liveRepos = useTrackedRepoData()
   const [refreshClicked, setRefreshClicked] = useState(false)
+  const [sort, setSort] = useState<TrackedSort>('stars')
+
+  const liveDataById = useMemo(() => {
+    const map = new Map<number, GithubRepo>()
+    liveRepos.forEach((repo) => map.set(repo.id, repo))
+    return map
+  }, [liveRepos])
+
+  const sortedRefs = useMemo(() => {
+    return [...trackedRefs].sort((a, b) => {
+      const repoA = liveDataById.get(a.id)
+      const repoB = liveDataById.get(b.id)
+      if (!repoA || !repoB) return 0
+      return getSortValue(repoB, sort) - getSortValue(repoA, sort)
+    })
+  }, [trackedRefs, liveDataById, sort])
+
+  const sortedLiveRepos = useMemo(() => {
+    return [...liveRepos].sort((a, b) => getSortValue(b, sort) - getSortValue(a, sort))
+  }, [liveRepos, sort])
 
   const handleRefreshAll = () => {
     setRefreshClicked(true)
@@ -67,22 +111,25 @@ function TrackedView() {
           </Typography>
         </Box>
 
-        <Button
-          size="small"
-          variant="outlined"
-          startIcon={<RefreshIcon fontSize="small" className={refreshClicked ? styles.spinning : ''} />}
-          onClick={handleRefreshAll}
-          disabled={refreshClicked}
-          sx={{ textTransform: 'none' }}
-        >
-          Refresh All
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+          <SortSelect value={sort} onChange={(val) => setSort(val as TrackedSort)} options={SORT_OPTIONS} />
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<RefreshIcon fontSize="small" className={refreshClicked ? styles.spinning : ''} />}
+            onClick={handleRefreshAll}
+            disabled={refreshClicked}
+            sx={{ textTransform: 'none' }}
+          >
+            Refresh All
+          </Button>
+        </Box>
       </Box>
 
-      <ChartsContainer repos={liveRepos} />
+      <ChartsContainer repos={sortedLiveRepos} />
 
       <Grid container spacing={2}>
-        {trackedRefs.map((ref) => (
+        {sortedRefs.map((ref) => (
           <Grid key={ref.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <TrackedCard repoRef={ref} />
           </Grid>

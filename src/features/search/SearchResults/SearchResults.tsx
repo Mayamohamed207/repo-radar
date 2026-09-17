@@ -1,36 +1,59 @@
 import { Grid, Typography, Skeleton, Box, Button, CircularProgress } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import RepoCard from '../RepoCard/RepoCard'
+import SortSelect from '../../../components/SortSelect/SortSelect'
 import type { GithubRepo } from '../../../types/github'
+import type { SearchSort } from '../../../api/githubApi'
 import styles from './SearchResults.module.css'
 
 type SearchStatus = 'loading' | 'success' | 'error'
+
+const SORT_OPTIONS = [
+  { value: '', label: 'Best match' },
+  { value: 'stars', label: 'Stars' },
+  { value: 'forks', label: 'Forks' },
+  { value: 'updated', label: 'Recently updated' },
+]
 
 interface SearchResultsProps {
   status: SearchStatus
   results: GithubRepo[]
   hasMore: boolean
   loadingMore: boolean
+  sort: SearchSort
+  onSortChange: (sort: SearchSort) => void
   onLoadMore: () => void
   onBack: () => void
 }
 
-function SearchResults({ status, results, hasMore, loadingMore, onLoadMore, onBack }: SearchResultsProps) {
+function SearchResults({
+  status,
+  results,
+  hasMore,
+  loadingMore,
+  sort,
+  onSortChange,
+  onLoadMore,
+  onBack,
+}: SearchResultsProps) {
   return (
     <Box>
       <Box className={styles.header}>
         <Typography sx={{ fontWeight: 700, fontSize: { xs: '1rem', sm: '1.25rem' } }}>
           Search Results
         </Typography>
-        <Button
-          size="small"
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-          onClick={onBack}
-          sx={{ textTransform: 'none', fontSize: { xs: '0.75rem', sm: '0.85rem' }, flexShrink: 0 }}
-        >
-          Back to Tracked Repos
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+          <SortSelect value={sort} onChange={(val) => onSortChange(val as SearchSort)} options={SORT_OPTIONS} />
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<ArrowBackIcon />}
+            onClick={onBack}
+            sx={{ textTransform: 'none', fontSize: { xs: '0.75rem', sm: '0.85rem' }, flexShrink: 0 }}
+          >
+            Back to Tracked Repos
+          </Button>
+        </Box>
       </Box>
 
       {status === 'loading' && (

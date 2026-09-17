@@ -49,7 +49,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
           {repo ? repo.description || 'No description provided' : <Skeleton variant="text" />}
         </Typography>
 
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+        <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'var(--color-text-secondary)' }}>
           Last commit: {repo?.pushed_at ? commitDate : isLoading ? 'Loading...' : 'N/A'}
         </Typography>
 

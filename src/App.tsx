@@ -3,13 +3,14 @@ import { Box, Container } from '@mui/material'
 import Navbar from './components/Navbar/Navbar'
 import SearchResults from './features/search/SearchResults/SearchResults'
 import TrackedView from './features/tracked/TrackedView/TrackedView'
-import { useSearchReposQuery } from './api/githubApi'
+import { useSearchReposQuery, type SearchSort } from './api/githubApi'
 import { useDebouncedValue } from './hooks/useDebouncedValue'
 import type { GithubRepo } from './types/github'
 
 function App() {
   const [searchInput, setSearchInput] = useState('')
   const [page, setPage] = useState(1)
+  const [sort, setSort] = useState<SearchSort>('')
   const [allResults, setAllResults] = useState<GithubRepo[]>([])
   const [loadingMore, setLoadingMore] = useState(false)
   const debouncedSearch = useDebouncedValue(searchInput, 500)
@@ -17,7 +18,7 @@ function App() {
   const hasSearched = debouncedSearch.trim() !== ''
 
   const { data, isFetching, isError } = useSearchReposQuery(
-    { searchTerm: debouncedSearch, page },
+    { searchTerm: debouncedSearch, page, sort },
     { skip: !hasSearched }
   )
 
@@ -25,7 +26,7 @@ function App() {
     setPage(1)
     setAllResults([])
     setLoadingMore(false)
-  }, [debouncedSearch])
+  }, [debouncedSearch, sort])
 
   useEffect(() => {
     if (!data) return
@@ -63,6 +64,8 @@ function App() {
             results={allResults}
             hasMore={hasMore}
             loadingMore={loadingMore}
+            sort={sort}
+            onSortChange={setSort}
             onLoadMore={handleLoadMore}
             onBack={handleBack}
           />

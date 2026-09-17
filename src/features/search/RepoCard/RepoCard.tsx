@@ -16,6 +16,8 @@ function RepoCard({ repo }: RepoCardProps) {
   const dispatch = useDispatch<AppDispatch>()
   const isTracked = useSelector((state: RootState) => state.tracked.repos.some((r) => r.id === repo.id))
 
+  const commitDate = repo.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
+
   const handleToggleTrack = () => {
     if (isTracked) {
       dispatch(untrackRepo(repo.id))
@@ -40,7 +42,11 @@ function RepoCard({ repo }: RepoCardProps) {
           {repo.description || 'No description provided'}
         </Typography>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+        <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'var(--color-text-secondary)' }}>
+          Last commit: {commitDate}
+        </Typography>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1.5 }}>
           <RepoStatsRow stars={repo.stargazers_count} openIssues={repo.open_issues_count} forks={repo.forks_count} />
 
           <Button
