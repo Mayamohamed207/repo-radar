@@ -1,28 +1,30 @@
-import { useState } from 'react'
-import { TextField, Box } from '@mui/material'
-import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
-import { useSearchReposQuery } from '../../../api/githubApi'
+import { TextField, Box, InputAdornment } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 
-function SearchBar() {
-  const [searchInput, setSearchInput] = useState('')
-  const debouncedSearch = useDebouncedValue(searchInput, 500)
+interface SearchBarProps {
+  value: string
+  onChange: (value: string) => void
+}
 
-  const { data, isFetching, isError } = useSearchReposQuery(debouncedSearch, {
-    skip: debouncedSearch.trim() === '',
-  })
-
+function SearchBar({ value, onChange }: SearchBarProps) {
   return (
     <Box sx={{ width: '100%', maxWidth: '32rem' }}>
       <TextField
         fullWidth
         size="small"
-        label="Search GitHub repositories"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
+        placeholder="Search GitHub repositories..."
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon color="action" fontSize="small" />
+              </InputAdornment>
+            ),
+          },
+        }}
       />
-      {isFetching && <p>Loading...</p>}
-      {isError && <p>Something went wrong</p>}
-      {data && <p>{data.total_count} results found</p>}
     </Box>
   )
 }
