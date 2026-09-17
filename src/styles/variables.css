@@ -13,6 +13,14 @@
   --color-error: #cf222e;
 
   --color-star: #d4a72c;
+
+  /* Chart Palette */
+  --chart-1: #2da44e; 
+  --chart-2: #0969da;
+  --chart-3: #d4a72c; 
+  --chart-4: #8250df; 
+  --chart-5: #cf222e; 
+  --chart-6: #1b7c83;
 }
 
 [data-theme='dark'] {
@@ -30,4 +38,12 @@
   --color-error: #f85149;
 
   --color-star: #e3b341;
+
+  /* Chart Palette*/
+  --chart-1: #3fb950; 
+  --chart-2: #58a6ff; 
+  --chart-3: #e3b341;
+  --chart-4: #bc8cff; 
+  --chart-5: #f0883e; 
+  --chart-6: #39c5cf; 
 }

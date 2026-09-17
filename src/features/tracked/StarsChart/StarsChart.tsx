@@ -3,10 +3,12 @@ import { BarChart } from '@mui/x-charts/BarChart'
 import type { GithubRepo } from '../../../types/github'
 
 const PALETTE = [
-  'var(--color-primary)',
-  'var(--color-star)',
-  'var(--color-success)',
-  'var(--color-error)',
+  'var(--chart-1)',
+  'var(--chart-2)',
+  'var(--chart-3)',
+  'var(--chart-4)',
+  'var(--chart-5)',
+  'var(--chart-6)',
 ]
 
 const formatCompact = new Intl.NumberFormat('en', { notation: 'compact' })
