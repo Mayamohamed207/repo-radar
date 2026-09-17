@@ -4,29 +4,31 @@ import RefreshIcon from '@mui/icons-material/Refresh'
 import { useSelector, useDispatch } from 'react-redux'
 import type { RootState, AppDispatch } from '../../../store/store'
 import { githubApi } from '../../../api/githubApi'
+import { useTrackedRepoData } from '../../../hooks/useTrackedRepoData'
 import TrackedCard from '../TrackedCard/TrackedCard'
 import ChartsContainer from '../Charts/ChartsContainer'
 import styles from './TrackedView.module.css'
 
 function TrackedView() {
   const dispatch = useDispatch<AppDispatch>()
-  const trackedRepos = useSelector((state: RootState) => state.tracked.repos)
-  const [refreshing, setRefreshing] = useState(false)
+  const trackedRefs = useSelector((state: RootState) => state.tracked.repos)
+  const liveRepos = useTrackedRepoData()
+  const [refreshClicked, setRefreshClicked] = useState(false)
 
   const handleRefreshAll = () => {
-    setRefreshing(true)
-    trackedRepos.forEach((repo) => {
+    setRefreshClicked(true)
+    trackedRefs.forEach((ref) => {
       dispatch(
-        githubApi.endpoints.getRepoByFullName.initiate(repo.full_name, {
+        githubApi.endpoints.getRepoByFullName.initiate(ref.full_name, {
           subscribe: false,
           forceRefetch: true,
         })
       )
     })
-    setTimeout(() => setRefreshing(false), 700)
+    setTimeout(() => setRefreshClicked(false), 500)
   }
 
-  if (trackedRepos.length === 0) {
+  if (trackedRefs.length === 0) {
     return (
       <Box className={styles.empty}>
         <Typography
@@ -61,28 +63,28 @@ function TrackedView() {
             Radar Dashboard
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Monitoring {trackedRepos.length} repositories
+            Monitoring {trackedRefs.length} repositories
           </Typography>
         </Box>
 
         <Button
           size="small"
           variant="outlined"
-          startIcon={<RefreshIcon fontSize="small" className={refreshing ? styles.spinning : ''} />}
+          startIcon={<RefreshIcon fontSize="small" className={refreshClicked ? styles.spinning : ''} />}
           onClick={handleRefreshAll}
-          disabled={refreshing}
+          disabled={refreshClicked}
           sx={{ textTransform: 'none' }}
         >
           Refresh All
         </Button>
       </Box>
 
-      <ChartsContainer repos={trackedRepos} />
+      <ChartsContainer repos={liveRepos} />
 
       <Grid container spacing={2}>
-        {trackedRepos.map((repo) => (
-          <Grid key={repo.id} size={{ xs: 12, sm: 6, md: 4 }}>
-            <TrackedCard initialRepo={repo} isRefreshingAll={refreshing} />
+        {trackedRefs.map((ref) => (
+          <Grid key={ref.id} size={{ xs: 12, sm: 6, md: 4 }}>
+            <TrackedCard repoRef={ref} />
           </Grid>
         ))}
       </Grid>

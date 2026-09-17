@@ -22,3 +22,7 @@ export interface GithubOwner {
   avatar_url: string
 }
 
+export interface TrackedRepoRef {
+  id: number
+  full_name: string
+}

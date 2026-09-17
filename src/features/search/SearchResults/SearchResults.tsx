@@ -32,7 +32,7 @@ function SearchResults({
   return (
     <Box>
       <Box className={styles.header}>
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+        <Typography sx={{ fontWeight: 700, fontSize: { xs: '1rem', sm: '1.25rem' } }}>
           Search Results
         </Typography>
         <Button
@@ -40,7 +40,7 @@ function SearchResults({
           variant="outlined"
           startIcon={<ArrowBackIcon />}
           onClick={onBack}
-          sx={{ textTransform: 'none' }}
+          sx={{ textTransform: 'none', fontSize: { xs: '0.75rem', sm: '0.85rem' }, flexShrink: 0 }}
         >
           Back to Tracked Repos
         </Button>
@@ -58,7 +58,7 @@ function SearchResults({
 
       {isError && (
         <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
-          GitHub API rate limit reached (60 requests/hour). Please wait a moment or try again later.
+          GitHub API rate limit reached (60 requests/hour).
         </Typography>
       )}
 

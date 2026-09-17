@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { GithubRepo } from '../../types/github'
+import type { TrackedRepoRef } from '../../types/github'
 
-const loadStorage = (): GithubRepo[] => {
+const loadStorage = (): TrackedRepoRef[] => {
   try {
     const data = localStorage.getItem('tracked_repos')
     return data ? JSON.parse(data) : []
@@ -11,7 +11,7 @@ const loadStorage = (): GithubRepo[] => {
 }
 
 interface TrackedState {
-  repos: GithubRepo[]
+  repos: TrackedRepoRef[]
 }
 
 const initialState: TrackedState = {
@@ -22,7 +22,7 @@ export const trackedRepos = createSlice({
   name: 'tracked',
   initialState,
   reducers: {
-    trackRepo: (state, action: PayloadAction<GithubRepo>) => {
+    trackRepo: (state, action: PayloadAction<TrackedRepoRef>) => {
       if (!state.repos.some((r) => r.id === action.payload.id)) {
         state.repos.push(action.payload)
         localStorage.setItem('tracked_repos', JSON.stringify(state.repos))

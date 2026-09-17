@@ -20,7 +20,7 @@ function RepoCard({ repo }: RepoCardProps) {
     if (isTracked) {
       dispatch(untrackRepo(repo.id))
     } else {
-      dispatch(trackRepo(repo))
+      dispatch(trackRepo({ id: repo.id, full_name: repo.full_name }))
     }
   }
 
