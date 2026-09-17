@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import type { GithubRepo } from '../../../types/github'
-import { PALETTE, formatCompact } from './ChartsContainer'
+import { PALETTE, formatCompact } from './chartConstants'
 
 interface ChartProps {
   repos: GithubRepo[]
