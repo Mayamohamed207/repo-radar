@@ -1,8 +1,5 @@
 import { useState } from 'react'
 import { Card, CardContent, Typography, Box, Avatar, IconButton, Button } from '@mui/material'
-import StarIcon from '@mui/icons-material/Star'
-import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined'
-import ForkRightIcon from '@mui/icons-material/ForkRight'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove'
 import { useDispatch } from 'react-redux'
@@ -10,6 +7,7 @@ import type { AppDispatch } from '../../../store/store'
 import { untrackRepo } from '../trackedRepos'
 import { useGetRepoByFullNameQuery } from '../../../api/githubApi'
 import type { GithubRepo } from '../../../types/github'
+import RepoStatsRow from '../../../components/RepoStatsRow/RepoStatsRow'
 import styles from './TrackedCard.module.css'
 
 interface TrackedCardProps {
@@ -59,20 +57,7 @@ function TrackedCard({ initialRepo, isRefreshingAll }: TrackedCardProps) {
           Last commit: {commitDate}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1.5 }}>
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <StarIcon sx={{ fontSize: '1.1rem', color: 'var(--color-star)' }} />
-              <Typography variant="body2">{repo.stargazers_count.toLocaleString()}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <ReportProblemOutlinedIcon sx={{ fontSize: '1.1rem', color: 'text.secondary' }} />
-              <Typography variant="body2">{repo.open_issues_count.toLocaleString()}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <ForkRightIcon sx={{ fontSize: '1.1rem', color: 'text.secondary' }} />
-              <Typography variant="body2">{repo.forks_count.toLocaleString()}</Typography>
-            </Box>
-          </Box>
+          <RepoStatsRow stars={repo.stargazers_count} openIssues={repo.open_issues_count} forks={repo.forks_count} />
 
           <Button
             size="small"
