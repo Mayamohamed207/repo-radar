@@ -4,31 +4,18 @@ import RepoCard from '../RepoCard/RepoCard'
 import type { GithubRepo } from '../../../types/github'
 import styles from './SearchResults.module.css'
 
+type SearchStatus = 'loading' | 'success' | 'error'
+
 interface SearchResultsProps {
+  status: SearchStatus
   results: GithubRepo[]
-  isFetching: boolean
-  isError: boolean
-  hasSearched: boolean
   hasMore: boolean
   loadingMore: boolean
   onLoadMore: () => void
   onBack: () => void
 }
 
-function SearchResults({
-  results,
-  isFetching,
-  isError,
-  hasSearched,
-  hasMore,
-  loadingMore,
-  onLoadMore,
-  onBack,
-}: SearchResultsProps) {
-  if (!hasSearched) return null
-
-  const isInitialLoad = isFetching && results.length === 0
-
+function SearchResults({ status, results, hasMore, loadingMore, onLoadMore, onBack }: SearchResultsProps) {
   return (
     <Box>
       <Box className={styles.header}>
@@ -46,7 +33,7 @@ function SearchResults({
         </Button>
       </Box>
 
-      {isInitialLoad && (
+      {status === 'loading' && (
         <Grid container spacing={2}>
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <Grid key={n} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -56,27 +43,29 @@ function SearchResults({
         </Grid>
       )}
 
-      {isError && (
+      {status === 'error' && (
         <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
           GitHub API rate limit reached (60 requests/hour).
         </Typography>
       )}
 
-      {!isInitialLoad && !isError && results.length === 0 && (
+      {status === 'success' && results.length === 0 && (
         <Typography color="text.secondary" className={styles.emptyState}>
           No repositories found.
         </Typography>
       )}
 
-      <Grid container spacing={2}>
-        {results.map((repo) => (
-          <Grid key={repo.id} size={{ xs: 12, sm: 6, md: 4 }}>
-            <RepoCard repo={repo} />
-          </Grid>
-        ))}
-      </Grid>
+      {status === 'success' && results.length > 0 && (
+        <Grid container spacing={2}>
+          {results.map((repo) => (
+            <Grid key={repo.id} size={{ xs: 12, sm: 6, md: 4 }}>
+              <RepoCard repo={repo} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
-      {!isInitialLoad && hasMore && (
+      {status === 'success' && hasMore && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
           <Button
             variant={loadingMore ? 'text' : 'outlined'}

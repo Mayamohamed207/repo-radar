@@ -19,16 +19,6 @@ function makeRepo(overrides: Partial<GithubRepo> = {}): GithubRepo {
   }
 }
 
-const baseProps = {
-  hasSearched: true,
-  isFetching: false,
-  isError: false,
-  hasMore: false,
-  loadingMore: false,
-  onLoadMore: () => {},
-  onBack: () => {},
-}
-
 const meta: Meta<typeof SearchResults> = {
   title: 'Features/SearchResults',
   component: SearchResults,
@@ -40,37 +30,64 @@ type Story = StoryObj<typeof SearchResults>
 
 export const WithResults: Story = {
   args: {
-    ...baseProps,
-
+    status: 'success',
     results: [
       makeRepo({ id: 1, full_name: 'facebook/react' }),
       makeRepo({ id: 2, full_name: 'vuejs/vue', stargazers_count: 45900 }),
       makeRepo({ id: 3, full_name: 'angular/angular', stargazers_count: 95000 }),
     ],
-
-    loadingMore: false
-  },
-}
-
-export const Loading: Story = {
-  args: {
-    ...baseProps,
-    results: [],
-    isFetching: true,
+    hasMore: true,
+    loadingMore: false,
+    onLoadMore: () => {},
+    onBack: () => {},
   },
 }
 
 export const NoResults: Story = {
   args: {
-    ...baseProps,
+    status: 'success',
     results: [],
+    hasMore: false,
+    loadingMore: false,
+    onLoadMore: () => {},
+    onBack: () => {},
+  },
+}
+
+export const Loading: Story = {
+  args: {
+    status: 'loading',
+    results: [],
+    hasMore: false,
+    loadingMore: false,
+    onLoadMore: () => {},
+    onBack: () => {},
   },
 }
 
 export const RateLimitError: Story = {
   args: {
-    ...baseProps,
+    status: 'error',
     results: [],
-    isError: true,
+    hasMore: false,
+    loadingMore: false,
+    onLoadMore: () => {},
+    onBack: () => {},
+  },
+}
+
+
+
+export const LoadingMore: Story = {
+  args: {
+    status: 'success',
+    results: [
+      makeRepo({ id: 1, full_name: 'facebook/react' }),
+      makeRepo({ id: 2, full_name: 'vuejs/vue', stargazers_count: 45900 }),
+    ],
+    hasMore: true,
+    loadingMore: true,
+    onLoadMore: () => {},
+    onBack: () => {},
   },
 }

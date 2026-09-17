@@ -20,11 +20,13 @@ function App() {
     { searchTerm: debouncedSearch, page },
     { skip: !hasSearched }
   )
+
   useEffect(() => {
     setPage(1)
     setAllResults([])
     setLoadingMore(false)
   }, [debouncedSearch])
+
   useEffect(() => {
     if (!data) return
     setAllResults((prev) => (page === 1 ? data.items : [...prev, ...data.items]))
@@ -45,16 +47,20 @@ function App() {
 
   const hasMore = data ? allResults.length < data.total_count : false
 
+  const status: 'loading' | 'success' | 'error' = isError
+    ? 'error'
+    : isFetching && page === 1
+    ? 'loading'
+    : 'success'
+
   return (
     <Box sx={{ minHeight: '100vh', width: '100%', bgcolor: 'background.default' }}>
       <Navbar searchInput={searchInput} onSearchChange={setSearchInput} />
       <Container maxWidth={false} sx={{ width: '100%', maxWidth: '80rem', mx: 'auto', py: 3, px: { xs: 2, sm: 3 } }}>
         {hasSearched ? (
           <SearchResults
+            status={status}
             results={allResults}
-            isFetching={isFetching}
-            isError={isError}
-            hasSearched={hasSearched}
             hasMore={hasMore}
             loadingMore={loadingMore}
             onLoadMore={handleLoadMore}
