@@ -21,7 +21,11 @@ function Logo() {
       <Typography
         variant="h6"
         component="span"
-        sx={{ fontWeight: 800, letterSpacing: '-0.03em' }}
+        sx={{
+          fontWeight: 800,
+          letterSpacing: '-0.03em',
+          color: 'var(--color-text-primary)',
+        }}
       >
         Repo
         <Box component="span" sx={{ color: 'primary.main' }}>
