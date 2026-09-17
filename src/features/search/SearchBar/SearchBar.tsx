@@ -1,5 +1,6 @@
-import { TextField, Box, InputAdornment } from '@mui/material'
+import { TextField, Box, InputAdornment, IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import ClearIcon from '@mui/icons-material/Clear'
 
 interface SearchBarProps {
   value: string
@@ -22,6 +23,13 @@ function SearchBar({ value, onChange }: SearchBarProps) {
                 <SearchIcon color="action" fontSize="small" />
               </InputAdornment>
             ),
+            endAdornment: value ? (
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => onChange('')}>
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
           },
         }}
       />
