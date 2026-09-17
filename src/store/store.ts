@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { githubApi } from '../api/githubApi'
+import trackedReposReducer from '../features/tracked/trackedRepos'
 
 export const store = configureStore({
   reducer: {
+    tracked: trackedReposReducer,
     [githubApi.reducerPath]: githubApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -2,27 +2,20 @@ import { useState } from 'react'
 import { Box, Container } from '@mui/material'
 import Navbar from './components/Navbar/Navbar'
 import SearchResults from './features/search/SearchResults/SearchResults'
-import { useSearchReposQuery } from './api/githubApi'
-import { useDebouncedValue } from './hooks/useDebouncedValue'
+import TrackedView from './features/tracked/TrackedView/TrackedView'
 
 function App() {
-  const [searchInput, setSearchInput] = useState('')
-  const debouncedSearch = useDebouncedValue(searchInput, 500)
-
-  const { data, isFetching, isError } = useSearchReposQuery(debouncedSearch, {
-    skip: debouncedSearch.trim() === '',
-  })
+  const [search, setSearch] = useState('')
 
   return (
-    <Box sx={{ minHeight: '100vh', width: '100%' }}>
-      <Navbar searchInput={searchInput} onSearchChange={setSearchInput} />
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      <Navbar searchInput={search} onSearchChange={setSearch} />
       <Container maxWidth="lg" sx={{ py: 3 }}>
-        <SearchResults
-          results={data?.items}
-          isFetching={isFetching}
-          isError={isError}
-          hasSearched={debouncedSearch.trim() !== ''}
-        />
+        {search.trim() ? (
+          <SearchResults query={search} onClear={() => setSearch('')} />
+        ) : (
+          <TrackedView />
+        )}
       </Container>
     </Box>
   )
