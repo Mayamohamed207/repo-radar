@@ -15,7 +15,8 @@ interface TrackedCardProps {
 
 function TrackedCard({ repoRef }: TrackedCardProps) {
   const dispatch = useDispatch<AppDispatch>()
-  const { data: repo, isFetching, isError, refetch } = useGetRepoByFullNameQuery(repoRef.full_name)
+  const { data: repo, isLoading, isFetching, isError, refetch } =
+    useGetRepoByFullNameQuery(repoRef.full_name)
 
   const commitDate = repo?.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
 
@@ -33,14 +34,14 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
               {repoRef.full_name}
             </Typography>
           </Box>
-          <IconButton size="small" onClick={() => refetch()} disabled={isFetching}>
+          <IconButton size="small" onClick={() => refetch()} disabled={isFetching || isLoading}>
             <RefreshIcon fontSize="small" className={isFetching ? styles.spinning : ''} />
           </IconButton>
         </Box>
 
         {isError && (
           <Typography variant="caption" color="error" sx={{ display: 'block', mb: 0.5 }}>
-            Failed to refresh latest stats
+            {repo ? 'Failed to refresh latest stats' : 'Failed to load repository'}
           </Typography>
         )}
 
@@ -49,7 +50,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
         </Typography>
 
         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-          Last commit: {commitDate}
+          Last commit: {repo?.pushed_at ? commitDate : isLoading ? 'Loading...' : 'N/A'}
         </Typography>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1.5 }}>
