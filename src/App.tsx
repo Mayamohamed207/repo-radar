@@ -1,14 +1,10 @@
 import { Box } from '@mui/material'
-import Logo from './components/Logo'
-import SearchBar from './features/search/SearchBar'
+import Navbar from './components/Navbar/Navbar'
 
 function App() {
   return (
-    <Box sx={{ minHeight: '100vh', width: '100%', p: 2 }}>
-      <Box sx={{ mb: 3 }}>
-        <Logo />
-      </Box>
-      <SearchBar />
+    <Box sx={{ minHeight: '100vh', width: '100%' }}>
+      <Navbar />
     </Box>
   )
 }

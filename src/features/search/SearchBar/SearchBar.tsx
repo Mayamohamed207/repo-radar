@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { TextField, Box } from '@mui/material'
-import { useDebouncedValue } from '../../hooks/useDebouncedValue'
-import { useSearchReposQuery } from '../../api/githubApi'
+import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
+import { useSearchReposQuery } from '../../../api/githubApi'
 
 function SearchBar() {
   const [searchInput, setSearchInput] = useState('')
@@ -12,9 +12,10 @@ function SearchBar() {
   })
 
   return (
-    <Box sx={{ width: '100%', maxWidth: '40rem', mx: 'auto' }}>
+    <Box sx={{ width: '100%', maxWidth: '32rem' }}>
       <TextField
         fullWidth
+        size="small"
         label="Search GitHub repositories"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
