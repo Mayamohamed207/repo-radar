@@ -1,22 +1,37 @@
-import { Grid, Typography, Skeleton, Box, Button } from '@mui/material'
+import { Grid, Typography, Skeleton, Box, Button, CircularProgress } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import RepoCard from '../RepoCard/RepoCard'
 import type { GithubRepo } from '../../../types/github'
+import styles from './SearchResults.module.css'
 
 interface SearchResultsProps {
-  results: GithubRepo[] | undefined
+  results: GithubRepo[]
   isFetching: boolean
   isError: boolean
   hasSearched: boolean
+  hasMore: boolean
+  loadingMore: boolean
+  onLoadMore: () => void
   onBack: () => void
 }
 
-function SearchResults({ results, isFetching, isError, hasSearched, onBack }: SearchResultsProps) {
+function SearchResults({
+  results,
+  isFetching,
+  isError,
+  hasSearched,
+  hasMore,
+  loadingMore,
+  onLoadMore,
+  onBack,
+}: SearchResultsProps) {
   if (!hasSearched) return null
+
+  const isInitialLoad = isFetching && results.length === 0
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+      <Box className={styles.header}>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           Search Results
         </Typography>
@@ -31,7 +46,7 @@ function SearchResults({ results, isFetching, isError, hasSearched, onBack }: Se
         </Button>
       </Box>
 
-      {isFetching && (
+      {isInitialLoad && (
         <Grid container spacing={2}>
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <Grid key={n} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -47,19 +62,33 @@ function SearchResults({ results, isFetching, isError, hasSearched, onBack }: Se
         </Typography>
       )}
 
-      {!isFetching && (!results || results.length === 0) && (
-        <Typography color="text.secondary" sx={{ mt: 2, textAlign: 'center' }}>
+      {!isInitialLoad && !isError && results.length === 0 && (
+        <Typography color="text.secondary" className={styles.emptyState}>
           No repositories found.
         </Typography>
       )}
 
       <Grid container spacing={2}>
-        {results?.map((repo) => (
+        {results.map((repo) => (
           <Grid key={repo.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <RepoCard repo={repo} />
           </Grid>
         ))}
       </Grid>
+
+      {!isInitialLoad && hasMore && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Button
+            variant={loadingMore ? 'text' : 'outlined'}
+            onClick={onLoadMore}
+            disabled={loadingMore}
+            startIcon={loadingMore ? <CircularProgress size={16} /> : null}
+            sx={{ textTransform: 'none', minWidth: '9rem' }}
+          >
+            {loadingMore ? 'Loading more...' : 'Load more'}
+          </Button>
+        </Box>
+      )}
     </Box>
   )
 }
