@@ -22,12 +22,12 @@ function ForksBarChart({ repos }: ChartProps) {
             dataKey: 'fullName',
             valueFormatter: (val: string) => val.split('/')[1] || val,
             colorMap: { type: 'ordinal', colors: PALETTE },
-            tickLabelStyle: { fontSize: 11 },
+            tickLabelStyle: { fontSize: 10 },
           },
         ]}
         xAxis={[
           {
-            tickNumber: 20,
+            tickNumber: 4,
             valueFormatter: (val: number | null) => (val != null ? formatCompact.format(val) : ''),
           },
         ]}
@@ -40,7 +40,7 @@ function ForksBarChart({ repos }: ChartProps) {
         ]}
         slots={{ legend: () => null }}
         height={280}
-        margin={{ left: 60, right: 15, top: 15, bottom: 5 }}
+        margin={{ left: 15, right: 15, top: 15, bottom: 5 }}
       />
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1.5, mt: 1 }}>

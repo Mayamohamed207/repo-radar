@@ -37,7 +37,7 @@ function StarsBarChart({ repos }: ChartProps) {
         ]}
         slots={{ legend: () => null }}
         height={280}
-        margin={{ top: 10, bottom: 5, left: 45, right: 15 }}
+        margin={{ top: 10, bottom: 5, left: 15, right: 15 }}
       />
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1.5, mt: 1 }}>
