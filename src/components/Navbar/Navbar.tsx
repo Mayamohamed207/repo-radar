@@ -12,10 +12,11 @@ interface NavbarProps {
 }
 
 function Navbar({ searchInput, onSearchChange }: NavbarProps) {
-  const { mode, setMode } = useColorScheme()
+  const { mode, systemMode, setMode } = useColorScheme()
+  const effectiveMode = mode === 'system' ? systemMode : mode
 
   const toggleTheme = () => {
-    setMode(mode === 'dark' ? 'light' : 'dark')
+    setMode(effectiveMode === 'dark' ? 'light' : 'dark')
   }
 
   return (
@@ -31,7 +32,7 @@ function Navbar({ searchInput, onSearchChange }: NavbarProps) {
             sx={{ color: 'var(--color-text-primary)' }}
             aria-label="toggle dark/light theme"
           >
-            {mode === 'dark' ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
+            {effectiveMode === 'dark' ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
           </IconButton>
         </Box>
       </Toolbar>
