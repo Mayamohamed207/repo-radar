@@ -27,6 +27,7 @@ function ForksBarChart({ repos }: ChartProps) {
         ]}
         xAxis={[
           {
+            tickNumber: 20,
             valueFormatter: (val: number | null) => (val != null ? formatCompact.format(val) : ''),
           },
         ]}
