@@ -8,6 +8,7 @@ import { untrackRepo } from '../trackedRepos'
 import { useGetRepoByFullNameQuery } from '../../../api/githubApi'
 import type { TrackedRepoRef } from '../../../types/github'
 import RepoStatsRow from '../../../components/RepoStatsRow/RepoStatsRow'
+import { useToast } from '../../../context/useToast'
 import styles from './TrackedCard.module.css'
 
 interface TrackedCardProps {
@@ -16,6 +17,7 @@ interface TrackedCardProps {
 
 function TrackedCard({ repoRef }: TrackedCardProps) {
   const dispatch = useDispatch<AppDispatch>()
+  const { showToast } = useToast()
   const { data: repo, isLoading, isFetching, isError, refetch } =
     useGetRepoByFullNameQuery(repoRef.full_name)
 
@@ -33,6 +35,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
   const handleUntrack = (event: MouseEvent) => {
     event.stopPropagation()
     dispatch(untrackRepo(repoRef.id))
+    showToast(`${repoRef.full_name} removed from tracked repos`, 'info')
   }
 
   return (

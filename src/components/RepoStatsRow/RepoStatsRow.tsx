@@ -11,7 +11,7 @@ interface RepoStatsRowProps {
 
 function RepoStatsRow({ stars, openIssues, forks }: RepoStatsRowProps) {
   return (
-    <Box sx={{ display: 'flex', gap: 1.5 }}>
+    <Box sx={{ display: 'flex', gap: { xs: 0.75, sm: 1.5 }, flexWrap: 'wrap', minWidth: 0, flex: 1 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
         <StarIcon sx={{ fontSize: '1.1rem', color: 'var(--color-star)' }} />
         <Typography variant="body2">{stars.toLocaleString()}</Typography>

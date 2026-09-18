@@ -132,7 +132,7 @@ function TrackedView() {
               '& .MuiButton-startIcon': { mr: { xs: 0.25, sm: 1 } },
             }}
           >
-            Refresh
+            Refresh All
           </Button>
         </Box>
       </Box>

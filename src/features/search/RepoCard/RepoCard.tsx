@@ -7,6 +7,7 @@ import type { RootState, AppDispatch } from '../../../store/store'
 import { trackRepo, untrackRepo } from '../../tracked/trackedRepos'
 import type { GithubRepo } from '../../../types/github'
 import RepoStatsRow from '../../../components/RepoStatsRow/RepoStatsRow'
+import { useToast } from '../../../context/useToast'
 import styles from './RepoCard.module.css'
 
 interface RepoCardProps {
@@ -15,6 +16,7 @@ interface RepoCardProps {
 
 function RepoCard({ repo }: RepoCardProps) {
   const dispatch = useDispatch<AppDispatch>()
+  const { showToast } = useToast()
   const isTracked = useSelector((state: RootState) => state.tracked.repos.some((r) => r.id === repo.id))
 
   const commitDate = repo.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
@@ -27,8 +29,10 @@ function RepoCard({ repo }: RepoCardProps) {
     event.stopPropagation()
     if (isTracked) {
       dispatch(untrackRepo(repo.id))
+      showToast(`${repo.full_name} removed from tracked repos`, 'info')
     } else {
       dispatch(trackRepo({ id: repo.id, full_name: repo.full_name }))
+      showToast(`${repo.full_name} added to tracked repos`, 'success')
     }
   }
 
