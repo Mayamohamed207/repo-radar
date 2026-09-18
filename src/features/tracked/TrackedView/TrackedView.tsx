@@ -102,26 +102,37 @@ function TrackedView() {
   return (
     <Box>
       <Box className={styles.header}>
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800 }}>
+        <Box className={styles.titleBlock}>
+          <Typography sx={{ fontWeight: 800, fontSize: { xs: '0.95rem', sm: '1.5rem' } }}>
             Radar Dashboard
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.65rem', sm: '0.875rem' }, display: { xs: 'none', sm: 'block' } }}
+          >
             Monitoring {trackedRefs.length} repositories
           </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Box className={styles.controls}>
           <SortSelect value={sort} onChange={(val) => setSort(val as TrackedSort)} options={SORT_OPTIONS} />
           <Button
             size="small"
             variant="outlined"
-            startIcon={<RefreshIcon fontSize="small" className={refreshClicked ? styles.spinning : ''} />}
+            startIcon={<RefreshIcon sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' } }} className={refreshClicked ? styles.spinning : ''} />}
             onClick={handleRefreshAll}
             disabled={refreshClicked}
-            sx={{ textTransform: 'none' }}
+            sx={{
+              textTransform: 'none',
+              fontSize: { xs: '0.65rem', sm: '0.85rem' },
+              whiteSpace: 'nowrap',
+              minWidth: 'unset',
+              px: { xs: 0.75, sm: 2 },
+              '& .MuiButton-startIcon': { mr: { xs: 0.25, sm: 1 } },
+            }}
           >
-            Refresh All
+            Refresh
           </Button>
         </Box>
       </Box>

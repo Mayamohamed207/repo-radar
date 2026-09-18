@@ -2,8 +2,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
   margin-bottom: 1.5rem;
-  gap: 0.75rem;
+}
+
+.title {
+  white-space: nowrap;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .emptyState {

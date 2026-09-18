@@ -18,11 +18,19 @@ function SortSelect({ value, onChange, options }: SortSelectProps) {
   }
 
   return (
-    <FormControl size="small" sx={{ minWidth: '9rem' }}>
+    <FormControl
+      size="small"
+      sx={{
+        minWidth: { xs: '5.5rem', sm: '9rem' },
+        '& .MuiInputLabel-root': { fontSize: { xs: '0.7rem', sm: '1rem' } },
+        '& .MuiInputLabel-shrink': { fontSize: { xs: '0.75rem', sm: '0.85rem' } },
+        '& .MuiSelect-select': { fontSize: { xs: '0.7rem', sm: '0.85rem' }, py: { xs: 0.5, sm: 1 } },
+      }}
+    >
       <InputLabel id="sort-select-label">Sort by</InputLabel>
       <Select labelId="sort-select-label" label="Sort by" value={value} onChange={handleChange}>
         {options.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
+          <MenuItem key={option.value} value={option.value} sx={{ fontSize: { xs: '0.8rem', sm: '0.9rem' } }}>
             {option.label}
           </MenuItem>
         ))}

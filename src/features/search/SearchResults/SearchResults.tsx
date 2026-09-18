@@ -39,19 +39,26 @@ function SearchResults({
   return (
     <Box>
       <Box className={styles.header}>
-        <Typography sx={{ fontWeight: 700, fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+        <Typography className={styles.title} sx={{ fontWeight: 700, fontSize: { xs: '0.95rem', sm: '1.25rem' } }}>
           Search Results
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Box className={styles.controls}>
           <SortSelect value={sort} onChange={(val) => onSortChange(val as SearchSort)} options={SORT_OPTIONS} />
           <Button
             size="small"
             variant="outlined"
-            startIcon={<ArrowBackIcon />}
+            startIcon={<ArrowBackIcon sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' } }} />}
             onClick={onBack}
-            sx={{ textTransform: 'none', fontSize: { xs: '0.75rem', sm: '0.85rem' }, flexShrink: 0 }}
+            sx={{
+              textTransform: 'none',
+              fontSize: { xs: '0.65rem', sm: '0.85rem' },
+              whiteSpace: 'nowrap',
+              minWidth: 'unset',
+              px: { xs: 0.75, sm: 2 },
+              '& .MuiButton-startIcon': { mr: { xs: 0.25, sm: 1 } },
+            }}
           >
-            Back to Tracked Repos
+            Back
           </Button>
         </Box>
       </Box>
