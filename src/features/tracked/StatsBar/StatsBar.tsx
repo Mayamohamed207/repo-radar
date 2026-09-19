@@ -3,9 +3,15 @@ import StarIcon from '@mui/icons-material/Star'
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined'
 import ForkRightIcon from '@mui/icons-material/ForkRight'
 import type { GithubRepo } from '../../../types/github'
+import { useAnimatedNumber } from './useAnimatedNumber'
 
 interface StatsBarProps {
   repos: GithubRepo[]
+}
+
+function AnimatedStat({ value }: { value: number }) {
+  const displayValue = useAnimatedNumber(value)
+  return <>{displayValue.toLocaleString()}</>
 }
 
 function StatsBar({ repos }: StatsBarProps) {
@@ -65,7 +71,7 @@ function StatsBar({ repos }: StatsBarProps) {
                 noWrap
                 sx={{ fontWeight: 800, fontSize: { xs: '0.8rem', sm: '1.4rem' }, lineHeight: 1.1 }}
               >
-                {stat.value.toLocaleString()}
+                <AnimatedStat value={stat.value} />
               </Typography>
               <Typography
                 noWrap
