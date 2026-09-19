@@ -1,7 +1,7 @@
 import { Grid, Typography, Skeleton, Box, Button, CircularProgress } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import RepoCard from '../RepoCard/RepoCard'
-import SortSelect from '../../../components/SortSelect/SortSelect'
+import SortSelect from '../SortSelect/SortSelect'
 import type { GithubRepo } from '../../../types/github'
 import type { SearchSort } from '../../../api/githubApi'
 import styles from './SearchResults.module.css'

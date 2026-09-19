@@ -8,7 +8,7 @@ import { untrackRepo } from '../trackedRepos'
 import { useGetRepoByFullNameQuery } from '../../../api/githubApi'
 import type { TrackedRepoRef } from '../../../types/github'
 import RepoStatsRow from '../../../components/RepoStatsRow/RepoStatsRow'
-import { useToast } from '../../../context/useToast'
+import { useToast } from '../../../providers/useToast'
 import styles from './TrackedCard.module.css'
 
 interface TrackedCardProps {

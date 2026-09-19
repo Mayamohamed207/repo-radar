@@ -1,7 +1,8 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { PieChart } from '@mui/x-charts/PieChart'
-import type { GithubRepo } from '../../../types/github'
+import type { GithubRepo } from '../../../../types/github'
 import { PALETTE } from './chartConstants'
+import ChartBase from './ChartBase'
 
 interface ChartProps {
   repos: GithubRepo[]
@@ -40,17 +41,7 @@ function LanguagesChart({ repos }: ChartProps) {
           margin={{ top: 5, bottom: 5, left: 5, right: 5 }}
         />
       </Box>
-
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1.5, mt: 1 }}>
-        {Object.keys(langCounts).map((lang, i) => (
-          <Box key={lang} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <Box sx={{ width: '0.6rem', height: '0.6rem', borderRadius: '0.15rem', bgcolor: PALETTE[i % PALETTE.length] }} />
-            <Typography sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>
-              {lang}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
+      <ChartBase labels={Object.keys(langCounts)} />
     </Box>
   )
 }

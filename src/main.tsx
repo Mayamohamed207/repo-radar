@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { store } from './store/store'
 import { theme } from './theme/theme'
-import { ToastProvider } from './context/ToastContext'
+import { ToastProvider } from './providers/ToastContext'
 import App from './App'
 import './index.css'
 
