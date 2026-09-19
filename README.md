@@ -53,8 +53,6 @@ npm run storybook
 - Refresh a single repo, or hit "Refresh All" to pull fresh data for everything you're tracking
 - Each card has its own independent loading and error state, so if one repo fails to refresh it doesn't break the rest
 - Cards are clickable and open the repo on GitHub in a new tab
-
-**Tracked Card**
 ![Tracked Card](assets/images/tracked-card.png)
 
 **Charts**
