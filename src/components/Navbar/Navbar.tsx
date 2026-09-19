@@ -1,6 +1,7 @@
-import { AppBar, Toolbar, IconButton, Box } from '@mui/material'
+import { AppBar, Toolbar, Box } from '@mui/material'
 import { useColorScheme } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined'
 import Logo from '../Logo/Logo'
@@ -15,6 +16,7 @@ interface NavbarProps {
 function Navbar({ searchInput, onSearchChange }: NavbarProps) {
   const { mode, systemMode, setMode } = useColorScheme()
   const effectiveMode = mode === 'system' ? systemMode : mode
+  const isDark = effectiveMode === 'dark'
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -24,7 +26,7 @@ function Navbar({ searchInput, onSearchChange }: NavbarProps) {
   }, [])
 
   const toggleTheme = () => {
-    setMode(effectiveMode === 'dark' ? 'light' : 'dark')
+    setMode(isDark ? 'light' : 'dark')
   }
 
   return (
@@ -39,13 +41,23 @@ function Navbar({ searchInput, onSearchChange }: NavbarProps) {
           <SearchBar value={searchInput} onChange={onSearchChange} />
         </div>
         <Box sx={{ flexShrink: 0 }}>
-          <IconButton
+          <button
             onClick={toggleTheme}
-            sx={{ color: 'var(--color-text-primary)' }}
+            className={styles.themeToggle}
             aria-label="toggle dark/light theme"
           >
-            {effectiveMode === 'dark' ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
-          </IconButton>
+            <motion.div
+              className={styles.themeToggleThumb}
+              animate={{ x: isDark ? '1.5rem' : '0.15rem' }}
+              transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+            >
+              {isDark ? (
+                <DarkModeOutlinedIcon sx={{ fontSize: '0.9rem' }} />
+              ) : (
+                <LightModeOutlinedIcon sx={{ fontSize: '0.9rem' }} />
+              )}
+            </motion.div>
+          </button>
         </Box>
       </Toolbar>
     </AppBar>

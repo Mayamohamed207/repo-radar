@@ -24,3 +24,30 @@
   display: flex;
   justify-content: center;
 }
+
+.themeToggle {
+  position: relative;
+  width: 3.4rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.themeToggleThumb {
+  position: absolute;
+  top: 0.15rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  box-shadow: 0 0.1rem 0.3rem rgba(0, 0, 0, 0.15);
+}
