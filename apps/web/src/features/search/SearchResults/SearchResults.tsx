@@ -2,7 +2,7 @@ import { Grid, Typography, Skeleton, Box, Button, CircularProgress } from '@mui/
 import { motion } from 'framer-motion'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import RepoCard from '../RepoCard/RepoCard'
-import SortSelect from '../SortSelect/SortSelect'
+import { SortSelect } from "@repo-radar/ui";
 import type { GithubRepo } from '../../../types/github'
 import type { SearchSort } from '../../../api/githubApi'
 import styles from './SearchResults.module.css'

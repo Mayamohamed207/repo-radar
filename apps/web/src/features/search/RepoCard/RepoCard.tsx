@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from '../../../store/store'
 import { trackRepo, untrackRepo } from '../../tracked/trackedRepos'
 import type { GithubRepo } from '../../../types/github'
-import RepoStatsRow from '../../../components/RepoStatsRow/RepoStatsRow'
+import { RepoStatsRow } from "@repo-radar/ui";
 import { useToast } from '../../../providers/useToast'
 import styles from './RepoCard.module.css'
 

@@ -7,7 +7,7 @@ import type { AppDispatch } from '../../../store/store'
 import { untrackRepo } from '../trackedRepos'
 import { useGetRepoByFullNameQuery } from '../../../api/githubApi'
 import type { TrackedRepoRef } from '../../../types/github'
-import RepoStatsRow from '../../../components/RepoStatsRow/RepoStatsRow'
+import { RepoStatsRow } from "@repo-radar/ui";
 import { useToast } from '../../../providers/useToast'
 import styles from './TrackedCard.module.css'
 

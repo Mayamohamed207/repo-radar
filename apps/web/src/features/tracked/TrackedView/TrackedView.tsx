@@ -7,8 +7,8 @@ import type { RootState, AppDispatch } from '../../../store/store'
 import { githubApi } from '../../../api/githubApi'
 import { useTrackedRepoData } from '../useTrackedRepoData'
 import TrackedCard from '../TrackedCard/TrackedCard'
-import ChartsContainer from '../Charts/ChartsContainer'
-import SortSelect from '../../search/SortSelect/SortSelect'
+import { ChartsContainer } from "@repo-radar/charts";
+import { SortSelect } from "@repo-radar/ui";
 import type { GithubRepo } from '../../../types/github'
 import { motion } from 'framer-motion'
 import styles from './TrackedView.module.css'

@@ -1,20 +1,19 @@
 import { AppBar, Toolbar, Box } from '@mui/material'
 import { useColorScheme } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined'
 import Logo from '../Logo/Logo'
-import SearchBar from '../../features/search/SearchBar/SearchBar'
 import styles from './Navbar.module.css'
 
 interface NavbarProps {
-  searchInput: string
-  onSearchChange: (value: string) => void
+  searchSlot?: ReactNode
   onLogoClick?: () => void
 }
 
-function Navbar({ searchInput, onSearchChange, onLogoClick }: NavbarProps) {
+function Navbar({ searchSlot, onLogoClick }: NavbarProps) {
   const { mode, systemMode, setMode } = useColorScheme()
   const effectiveMode = mode === 'system' ? systemMode : mode
   const isDark = effectiveMode === 'dark'
@@ -38,9 +37,7 @@ function Navbar({ searchInput, onSearchChange, onLogoClick }: NavbarProps) {
     >
       <Toolbar className={styles.toolbar}>
         <Logo onClick={onLogoClick} />
-        <div className={styles.searchWrapper}>
-          <SearchBar value={searchInput} onChange={onSearchChange} />
-        </div>
+        <div className={styles.searchWrapper}>{searchSlot}</div>
         <Box sx={{ flexShrink: 0 }}>
           <button
             onClick={toggleTheme}

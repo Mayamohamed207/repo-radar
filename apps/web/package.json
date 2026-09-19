@@ -1,0 +1,15 @@
+{
+  "name": "@repo-radar/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006"
+  },
+  "dependencies": {
+    "@repo-radar/ui": "*",
+    "@repo-radar/charts": "*"
+  }
+}

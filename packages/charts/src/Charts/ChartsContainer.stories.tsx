@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import ChartsContainer from './ChartsContainer'
-import { makeRepo } from '../../../test/makeRepo'
+import { makeRepo } from '../../../../apps/web/src/test/makeRepo'
 
 const meta: Meta<typeof ChartsContainer> = {
   title: 'Features/ChartsContainer',

@@ -1,5 +1,6 @@
 import { Box, Container } from '@mui/material'
-import Navbar from './components/Navbar/Navbar'
+import { Navbar } from '@repo-radar/ui'
+import SearchBar from './features/search/SearchBar/SearchBar'
 import SearchResults from './features/search/SearchResults/SearchResults'
 import TrackedView from './features/tracked/TrackedView/TrackedView'
 import { useRepoSearch } from './features/search/useRepoSearch'
@@ -10,8 +11,9 @@ function App() {
   return (
     <Box sx={{ minHeight: '100vh', width: '100%', bgcolor: 'background.default' }}>
       <Navbar
-        searchInput={search.searchInput}
-        onSearchChange={search.setSearchInput}
+        searchSlot={
+          <SearchBar value={search.searchInput} onChange={search.setSearchInput} />
+        }
         onLogoClick={search.reset}
       />
       <Container

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { INITIAL_VIEWPORTS } from 'storybook/viewport'
 import Navbar from './Navbar'
+import SearchBar from '../../../../apps/web/src/features/search/SearchBar/SearchBar'
 
 const meta: Meta<typeof Navbar> = {
   title: 'Components/Navbar',
@@ -11,6 +12,15 @@ const meta: Meta<typeof Navbar> = {
       options: INITIAL_VIEWPORTS,
     },
   },
+  render: function Render(args) {
+    const [searchInput, setSearchInput] = useState('')
+    return (
+      <Navbar
+        {...args}
+        searchSlot={<SearchBar value={searchInput} onChange={setSearchInput} />}
+      />
+    )
+  },
 }
 
 export default meta
@@ -18,28 +28,15 @@ export default meta
 type Story = StoryObj<typeof Navbar>
 
 export const Desktop: Story = {
-  args: {
-    searchInput: '',
-    onSearchChange: () => {},
-  },
   globals: {
     viewport: { value: 'ipad', isRotated: false },
   },
 }
 
 export const Mobile: Story = {
-  args: {
-    searchInput: '',
-    onSearchChange: () => {},
-  },
   globals: {
     viewport: { value: 'iphonex', isRotated: false },
   },
 }
 
-export const Interactive: Story = {
-  render: function Render() {
-    const [searchInput, setSearchInput] = useState('')
-    return <Navbar searchInput={searchInput} onSearchChange={setSearchInput} />
-  },
-}
+export const Interactive: Story = {}
