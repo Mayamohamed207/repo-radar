@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Card, CardContent, Typography, Box, ToggleButtonGroup, ToggleButton } from '@mui/material'
+import { useEffect, useRef, useState } from 'react'
+import { Card, CardContent, Typography, Box } from '@mui/material'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import ForkRightIcon from '@mui/icons-material/ForkRight'
 import DonutLargeIcon from '@mui/icons-material/DonutLarge'
@@ -16,8 +16,25 @@ interface ChartsContainerProps {
 
 type MetricType = 'stars' | 'forks' | 'issues' | 'languages'
 
+const METRICS: { value: MetricType; label: string; icon: typeof BarChartIcon }[] = [
+  { value: 'stars', label: 'Stars', icon: BarChartIcon },
+  { value: 'forks', label: 'Forks', icon: ForkRightIcon },
+  { value: 'issues', label: 'Issues', icon: DonutLargeIcon },
+  { value: 'languages', label: 'Languages', icon: CodeIcon },
+]
+
 function ChartsContainer({ repos }: ChartsContainerProps) {
   const [metric, setMetric] = useState<MetricType>('stars')
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 })
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    const activeButton = track.querySelector<HTMLButtonElement>(`[data-value="${metric}"]`)
+    if (!activeButton) return
+    setIndicator({ left: activeButton.offsetLeft, width: activeButton.offsetWidth })
+  }, [metric, repos])
 
   if (repos.length === 0) return null
 
@@ -51,69 +68,69 @@ function ChartsContainer({ repos }: ChartsContainerProps) {
             {getTitle()}
           </Typography>
 
-          <ToggleButtonGroup
-            size="small"
-            value={metric}
-            exclusive
-            onChange={(_, val) => val && setMetric(val)}
+          <Box
+            ref={trackRef}
             sx={{
-              width: { xs: '100%', sm: 'auto' },
+              position: 'relative',
               display: 'flex',
+              gap: 0.25,
+              width: { xs: '100%', sm: 'auto' },
+              bgcolor: 'var(--color-bg)',
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: '0.65rem',
+              p: 0.25,
             }}
           >
-            <ToggleButton
-              value="stars"
+            <Box
               sx={{
-                flex: { xs: 1, sm: 'initial' },
-                px: { xs: 0.5, sm: 1.5 },
-                py: 0.5,
-                fontSize: { xs: '0.75rem', sm: '0.85rem' },
-                textTransform: 'none',
+                position: 'absolute',
+                top: 0.25,
+                bottom: 0.25,
+                left: `${indicator.left}px`,
+                width: `${indicator.width}px`,
+                bgcolor: 'background.paper',
+                borderRadius: '0.5rem',
+                boxShadow: '0 0.1rem 0.4rem rgba(0, 0, 0, 0.12)',
+                transition: 'left 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
-            >
-              <BarChartIcon sx={{ fontSize: { xs: '1rem', sm: '1.2rem' }, mr: { xs: 0.25, sm: 0.5 } }} />
-              Stars
-            </ToggleButton>
-            <ToggleButton
-              value="forks"
-              sx={{
-                flex: { xs: 1, sm: 'initial' },
-                px: { xs: 0.5, sm: 1.5 },
-                py: 0.5,
-                fontSize: { xs: '0.75rem', sm: '0.85rem' },
-                textTransform: 'none',
-              }}
-            >
-              <ForkRightIcon sx={{ fontSize: { xs: '1rem', sm: '1.2rem' }, mr: { xs: 0.25, sm: 0.5 } }} />
-              Forks
-            </ToggleButton>
-            <ToggleButton
-              value="issues"
-              sx={{
-                flex: { xs: 1, sm: 'initial' },
-                px: { xs: 0.5, sm: 1.5 },
-                py: 0.5,
-                fontSize: { xs: '0.75rem', sm: '0.85rem' },
-                textTransform: 'none',
-              }}
-            >
-              <DonutLargeIcon sx={{ fontSize: { xs: '1rem', sm: '1.2rem' }, mr: { xs: 0.25, sm: 0.5 } }} />
-              Issues
-            </ToggleButton>
-            <ToggleButton
-              value="languages"
-              sx={{
-                flex: { xs: 1, sm: 'initial' },
-                px: { xs: 0.5, sm: 1.5 },
-                py: 0.5,
-                fontSize: { xs: '0.75rem', sm: '0.85rem' },
-                textTransform: 'none',
-              }}
-            >
-              <CodeIcon sx={{ fontSize: { xs: '1rem', sm: '1.2rem' }, mr: { xs: 0.25, sm: 0.5 } }} />
-              Languages
-            </ToggleButton>
-          </ToggleButtonGroup>
+            />
+            {METRICS.map((item) => {
+              const Icon = item.icon
+              const isActive = item.value === metric
+              return (
+                <Box
+                  key={item.value}
+                  component="button"
+                  data-value={item.value}
+                  onClick={() => setMetric(item.value)}
+                  sx={{
+                    position: 'relative',
+                    zIndex: 1,
+                    flex: { xs: 1, sm: 'initial' },
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 0.5,
+                    border: 'none',
+                    bgcolor: 'transparent',
+                    borderRadius: '0.5rem',
+                    px: { xs: 0.5, sm: 1.5 },
+                    py: 0.7,
+                    fontSize: { xs: '0.75rem', sm: '0.85rem' },
+                    fontWeight: 600,
+                    color: isActive ? 'primary.main' : 'text.secondary',
+                    cursor: 'pointer',
+                    transition: 'color 0.25s ease',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <Icon sx={{ fontSize: { xs: '1rem', sm: '1.2rem' } }} />
+                  {item.label}
+                </Box>
+              )
+            })}
+          </Box>
         </Box>
 
         {metric === 'stars' && <StarsBarChart repos={repos} />}
