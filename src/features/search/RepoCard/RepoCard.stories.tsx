@@ -1,10 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Box } from '@mui/material'
 import RepoCard from './RepoCard'
 import { makeRepo } from '../../../test/makeRepo'
 
 const meta: Meta<typeof RepoCard> = {
   title: 'Features/RepoCard',
   component: RepoCard,
+  decorators: [
+    (Story) => (
+      <Box sx={{ maxWidth: '24rem' }}>
+        <Story />
+      </Box>
+    ),
+  ],
 }
 
 export default meta

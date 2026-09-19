@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Box } from '@mui/material'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import TrackedCard from './TrackedCard'
@@ -6,7 +7,6 @@ import { githubApi } from '../../../api/githubApi'
 import trackedReducer from '../trackedRepos'
 import type { GithubRepo, TrackedRepoRef } from '../../../types/github'
 import { makeRepo } from '../../../test/makeRepo'
-
 
 type MockResult =
   | { type: 'success'; data: GithubRepo }
@@ -21,7 +21,7 @@ function storeWithMockedApi(result: MockResult) {
         queryFn: () => {
           if (result.type === 'success') return { data: result.data }
           if (result.type === 'error') return { error: { status: 403, data: result.message } }
-          return new Promise(() => {}) // never resolves to stay in loading state on purpose
+          return new Promise(() => {})
         },
       }),
     }),
@@ -39,6 +39,13 @@ function storeWithMockedApi(result: MockResult) {
 const meta: Meta<typeof TrackedCard> = {
   title: 'Features/TrackedCard',
   component: TrackedCard,
+  decorators: [
+    (Story) => (
+      <Box sx={{ maxWidth: '24rem' }}>
+        <Story />
+      </Box>
+    ),
+  ],
 }
 
 export default meta
