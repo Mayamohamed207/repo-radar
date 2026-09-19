@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { Card, CardContent, Typography, Box } from '@mui/material'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import ForkRightIcon from '@mui/icons-material/ForkRight'
@@ -9,6 +10,7 @@ import StarsBarChart from './StarsBarChart'
 import ForksBarChart from './ForksBarChart'
 import IssuesDonutChart from './IssuesDonutChart'
 import LanguagesChart from './LanguagesChart'
+import styles from './ChartsContainer.module.css'
 
 interface ChartsContainerProps {
   repos: GithubRepo[]
@@ -51,50 +53,21 @@ function ChartsContainer({ repos }: ChartsContainerProps) {
     }
   }
 
+  const indicatorStyle = {
+    '--indicator-left': `${indicator.left}px`,
+    '--indicator-width': `${indicator.width}px`,
+  } as CSSProperties
+
   return (
-    <Card variant="outlined" sx={{ mb: 3, overflow: 'hidden' }}>
-      <CardContent sx={{ p: { xs: 1.5, sm: 2 } }}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: 'space-between',
-            alignItems: { xs: 'flex-start', sm: 'center' },
-            gap: 1.5,
-            mb: 1.5,
-          }}
-        >
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+    <Card variant="outlined" className={styles.card}>
+      <CardContent className={styles.content}>
+        <Box className={styles.header}>
+          <Typography variant="subtitle1" className={styles.title}>
             {getTitle()}
           </Typography>
 
-          <Box
-            ref={trackRef}
-            sx={{
-              position: 'relative',
-              display: 'flex',
-              gap: 0.25,
-              width: { xs: '100%', sm: 'auto' },
-              bgcolor: 'var(--color-bg)',
-              border: '1px solid',
-              borderColor: 'divider',
-              borderRadius: '0.65rem',
-              p: 0.25,
-            }}
-          >
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0.25,
-                bottom: 0.25,
-                left: `${indicator.left}px`,
-                width: `${indicator.width}px`,
-                bgcolor: 'background.paper',
-                borderRadius: '0.5rem',
-                boxShadow: '0 0.1rem 0.4rem rgba(0, 0, 0, 0.12)',
-                transition: 'left 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
-              }}
-            />
+          <Box ref={trackRef} className={styles.tabsTrack} style={indicatorStyle}>
+            <Box className={styles.indicator} />
             {METRICS.map((item) => {
               const Icon = item.icon
               const isActive = item.value === metric
@@ -104,28 +77,9 @@ function ChartsContainer({ repos }: ChartsContainerProps) {
                   component="button"
                   data-value={item.value}
                   onClick={() => setMetric(item.value)}
-                  sx={{
-                    position: 'relative',
-                    zIndex: 1,
-                    flex: { xs: 1, sm: 'initial' },
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 0.5,
-                    border: 'none',
-                    bgcolor: 'transparent',
-                    borderRadius: '0.5rem',
-                    px: { xs: 0.5, sm: 1.5 },
-                    py: 0.7,
-                    fontSize: { xs: '0.75rem', sm: '0.85rem' },
-                    fontWeight: 600,
-                    color: isActive ? 'primary.main' : 'text.secondary',
-                    cursor: 'pointer',
-                    transition: 'color 0.25s ease',
-                    whiteSpace: 'nowrap',
-                  }}
+                  className={`${styles.tabButton} ${isActive ? styles.tabButtonActive : ''}`}
                 >
-                  <Icon sx={{ fontSize: { xs: '1rem', sm: '1.2rem' } }} />
+                  <Icon className={styles.tabIcon} />
                   {item.label}
                 </Box>
               )
