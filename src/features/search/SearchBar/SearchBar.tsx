@@ -16,6 +16,14 @@ function SearchBar({ value, onChange }: SearchBarProps) {
         placeholder="Search GitHub repositories..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+          },
+          '& .MuiOutlinedInput-root.Mui-focused': {
+            boxShadow: '0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 20%, transparent)',
+          },
+        }}
         slotProps={{
           input: {
             startAdornment: (
