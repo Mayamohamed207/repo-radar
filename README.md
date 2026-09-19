@@ -53,12 +53,14 @@ npm run storybook
 - Each card has its own independent loading and error state, so if one repo fails to refresh it doesn't break the rest
 - Cards are clickable and open the repo on GitHub in a new tab
 
-![Tracked repos](docs/images/tracked.png)
-
 **Charts**
 - Bar chart comparing stars across tracked repos
 
-![Charts](docs/images/charts.png)
+| Stars | Forks |
+|---|---|
+| ![Stars](docs/images/charts-stars.png) | ![Forks](docs/images/charts-forks.png) |
+| **Open issues** | **Languages** |
+| ![Issues](docs/images/charts-issues.png) | ![Languages](docs/images/charts-languages.png) |
 
 ---
 
@@ -68,13 +70,28 @@ npm run storybook
 - **Storybook** — stories for the main UI pieces (`RepoCard`, `TrackedCard`, `SearchBar`, `SearchResults`, `Navbar`, `ChartsContainer`), including loading/error/empty states for the ones that depend on the API.
 - **Theme switching** — dark/light toggle, persisted automatically via MUI's color scheme storage
 
-![Dark mode](docs/images/dark-mode.png)
+| Light | Dark |
+|---|---|
+| ![Light theme](docs/images/theme-light.png) | ![Dark theme](docs/images/theme-dark.png) |
 
+- **Clickable repo cards** — cards in both the search results and the tracked list open the repo on GitHub in a new tab
 - **Extra charts** — forks leaderboard, open issues donut, languages breakdown, in addition to the required stars comparison
 - **A stats strip** — totals stars/issues/forks across everything tracked, so you get a sense of the whole list at a glance
 - **Sort options** — both search results and tracked repos can be sorted (stars/forks/recently updated), not just displayed in fetch order
 - **Toast notifications** — feedback when tracking/untracking a repo
-- **Fully responsive layout**
+- **Fully responsive layout with framer motion animation**
+
+![Mobile layout](docs/images/mobile.png)
+
+---
+
+## Storybook
+
+![Storybook overview](docs/images/storybook-overview.png)
+
+| Navbar (desktop and mobile) | SearchResults states |
+|---|---|
+| ![Navbar story](docs/images/storybook-navbar.png) | ![SearchResults states](docs/images/storybook-states.png) |
 
 ---
 
@@ -114,7 +131,7 @@ repo-radar/
 
 **Why a monorepo.** Splitting `ui` and `charts` into their own packages keeps them reusable and independent of the app: `ui` knows nothing about Redux, and `charts` just takes an array of repos. The structure is also scalable, since new apps or packages can be added without restructuring. Unlike a polyrepo, where every shared change means publishing a package and bumping versions in each consumer, npm workspaces link everything locally, so changes show up in the app immediately, with one clone and one `npm install`.
 
-**Why RTK Query instead of `useState` + `fetch`.** Caching, loading/error flags, and refetching all come for free, which matters most for the "independent loading state per repo" requirement, each `TrackedCard` calls `useGetRepoByFullNameQuery` on its own, so each one gets its own `isFetching`/`isError` with zero manual wiring between components.
+**Why RTK Query instead of `useState` + `fetch`.** Caching, loading/error flags, and refetching come built in. This matters most for independent loading states: each `TrackedCard` calls `useGetRepoByFullNameQuery` on its own, so it gets its own `isFetching` and `isError` with no manual wiring between components. If one repo's request fails (deleted repo, rate limit), the others are unaffected, and RTK Query's cache means switching away and back doesn't trigger unnecessary refetches.
 
 **Tracked repos remember what, not what-it-looked-like.** The Redux slice only stores `{ id, full_name }` per tracked repo, never the stats. Stars, issues, forks always come live from RTK Query's cache. That way there's exactly one place that knows what a repo's numbers currently are, instead of a Redux copy and a cache copy that could quietly drift apart. `localStorage` only remembers which repos you're tracking, nothing about their state at some past moment. Reading that live data back out (for the charts, the stats strip) goes through a small selector built with `createSelector`, so it doesn't get flagged as producing a new array on every render for no reason.
 
