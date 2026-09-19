@@ -45,7 +45,7 @@ npm run storybook
 **Tracking**
 - Track / untrack any repo from search results
 - Tracked repos persist in `localStorage`, so refreshing the page doesn't lose your list
-- Each tracked repo shows live stats — stars, open issues, forks, last commit date
+- Each tracked repo shows live stats: stars, open issues, forks, last commit date
 - Refresh a single repo, or hit "Refresh All" to pull fresh data for everything you're tracking
 - Each card has its own independent loading and error state, so if one repo fails to refresh (rate limit, repo got deleted, whatever) it doesn't break the rest
 - Sort the tracked list by stars, forks, open issues, or recently updated
@@ -55,7 +55,7 @@ npm run storybook
 
 **Charts**
 - Bar chart comparing stars across tracked repos
-- Plus a forks leaderboard, an open issues donut chart, and a languages breakdown — these weren't required but felt like a natural extension once the stars chart was already there
+- Plus a forks leaderboard, an open issues donut chart, and a languages breakdown, these weren't required but felt like a natural extension once the stars chart was already there
 
 **Other**
 - Dark/light theme toggle that persists automatically via MUI's color scheme storage
@@ -68,16 +68,16 @@ npm run storybook
 A few things worth explaining:
 
 **Why Redux Toolkit + RTK Query instead of just `useState`/`fetch`**
-RTK Query handles caching, loading/error states, and refetching out of the box, which meant I didn't have to hand-roll any of that. It also naturally solves the "independent loading state per repo" requirement — each `TrackedCard` calls `useGetRepoByFullNameQuery` independently, so each one has its own `isFetching`/`isError`, with no manual wiring needed between components.
+RTK Query handles caching, loading/error states, and refetching out of the box, which meant I didn't have to hand-roll any of that. It also naturally solves the "independent loading state per repo" requirement, each `TrackedCard` calls `useGetRepoByFullNameQuery` independently, so each one has its own `isFetching`/`isError`, with no manual wiring needed between components.
 
 **Tracked repos: storing refs, not snapshots**
-The Redux slice for tracked repos only stores `{ id, full_name }` for each repo — not the full stats. The actual live data (stars, issues, etc.) always comes from RTK Query's cache. This means there's exactly one source of truth for "what does this repo's stats look like right now," instead of two copies that could drift out of sync (one in Redux, one in the API cache). `localStorage` only remembers *which* repos you're tracking, not their stats at some past point in time.
+The Redux slice for tracked repos only stores `{ id, full_name }` for each repo, not the full stats. The actual live data (stars, issues, etc.) always comes from RTK Query's cache. This means there's exactly one source of truth for "what does this repo's stats look like right now," instead of two copies that could drift out of sync (one in Redux, one in the API cache). `localStorage` only remembers *which* repos you're tracking, not their stats at some past point in time.
 
 **Search pagination**
 Search results accumulate in local state as you click "Load more" (rather than RTK Query's cache doing the merging), with a `page` counter that resets back to 1 whenever the search term or sort changes. The search results are typically stored on the caller side.
 
 **Toast notifications via Context, not Redux**
-Track/untrack success messages use React Context rather than adding them to the Redux store. Toast state is pure, UI feedback — it doesn't need to be time-traveled or inspected in Redux DevTools the way app data does, so it felt like the wrong fit for the store.
+Track/untrack success messages use React Context rather than adding them to the Redux store. Toast state is pure, UI feedback, it doesn't need to be inspected in Redux DevTools the way app data does, so it felt like the wrong fit for the store.
 
 ---
 
