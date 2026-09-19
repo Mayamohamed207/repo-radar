@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import SearchResults from './SearchResults'
 import { makeRepo } from '../../../test/makeRepo'
@@ -5,6 +6,16 @@ import { makeRepo } from '../../../test/makeRepo'
 const meta: Meta<typeof SearchResults> = {
   title: 'Features/SearchResults',
   component: SearchResults,
+  args: {
+    sort: 'stars',
+    onSortChange: () => {},
+    onLoadMore: () => {},
+    onBack: () => {},
+  },
+  render: function Render(args) {
+    const [sort, setSort] = useState(args.sort)
+    return <SearchResults {...args} sort={sort} onSortChange={setSort} />
+  },
 }
 
 export default meta
@@ -21,8 +32,6 @@ export const WithResults: Story = {
     ],
     hasMore: true,
     loadingMore: false,
-    onLoadMore: () => {},
-    onBack: () => {},
   },
 }
 
@@ -32,8 +41,6 @@ export const NoResults: Story = {
     results: [],
     hasMore: false,
     loadingMore: false,
-    onLoadMore: () => {},
-    onBack: () => {},
   },
 }
 
@@ -43,8 +50,6 @@ export const Loading: Story = {
     results: [],
     hasMore: false,
     loadingMore: false,
-    onLoadMore: () => {},
-    onBack: () => {},
   },
 }
 
@@ -54,12 +59,8 @@ export const RateLimitError: Story = {
     results: [],
     hasMore: false,
     loadingMore: false,
-    onLoadMore: () => {},
-    onBack: () => {},
   },
 }
-
-
 
 export const LoadingMore: Story = {
   args: {
@@ -70,7 +71,5 @@ export const LoadingMore: Story = {
     ],
     hasMore: true,
     loadingMore: true,
-    onLoadMore: () => {},
-    onBack: () => {},
   },
 }
