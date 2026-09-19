@@ -4,7 +4,10 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { store } from '../src/store/store'
 import { theme } from '../src/theme/theme'
+import { ToastProvider } from '../src/providers/ToastContext'
+// @ts-expect-error 
 import '../src/styles/variables.css'
+// @ts-expect-error
 import '../src/index.css'
 
 const preview: Preview = {
@@ -13,7 +16,9 @@ const preview: Preview = {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Story />
+          <ToastProvider>
+            <Story />
+          </ToastProvider>
         </ThemeProvider>
       </Provider>
     ),
