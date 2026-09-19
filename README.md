@@ -1,6 +1,7 @@
 # Repo Radar
+**Live demo:** https://repo-radar-platform.vercel.app/
 
-A dashboard where you can search GitHub repos, track the ones you care about, and keep an eye on their stats (stars, forks, open issues, last commit, Languages) without having to go back to GitHub every time.
+A dashboard where you can search GitHub repos, track the ones you care about, and keep an eye on their stats (stars, forks, open issues, last commit, languages) without having to go back to GitHub every time.
 
 ![Repo Radar dashboard](docs/images/hero.png)
 
@@ -77,7 +78,7 @@ npm run storybook
 - **Clickable repo cards** — cards in both the search results and the tracked list open the repo on GitHub in a new tab
 - **Extra charts** — forks leaderboard, open issues donut, languages breakdown, in addition to the required stars comparison
 - **A stats strip** — totals stars/issues/forks across everything tracked, so you get a sense of the whole list at a glance
-- **Sort options** — both search results and tracked repos can be sorted (stars/forks/recently updated), not just displayed in fetch order
+- **Sort options** — both search results and tracked repos can be sorted (stars/forks/open issues/recently updated), not just displayed in fetch order
 - **Toast notifications** — feedback when tracking/untracking a repo
 - **Fully responsive layout with framer motion animation**
 

@@ -36,12 +36,3 @@ export const LongDescription: Story = {
     }),
   },
 }
-
-export const LongRepoName: Story = {
-  args: {
-    repo: makeRepo({
-      id: 999004,
-      full_name: 'some-very-long-organization-name/an-extremely-descriptive-repository-name',
-    }),
-  },
-}
