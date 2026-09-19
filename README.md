@@ -3,7 +3,7 @@
 
 A dashboard where you can search GitHub repos, track the ones you care about, and keep an eye on their stats (stars, forks, open issues, last commit, languages) without having to go back to GitHub every time.
 
-![Repo Radar dashboard](docs/images/hero.png)
+![Repo Radar dashboard](assets/images/hero.png)
 
 ---
 
@@ -44,7 +44,7 @@ npm run storybook
 - Pagination via a "Load more" button
 - Loading skeletons, an empty state, and a rate-limit error state
 
-![Search results](docs/images/search.png)
+![Search results](assets/images/search.png)
 
 **Tracking**
 - Track / untrack any repo from search results
@@ -59,13 +59,13 @@ npm run storybook
 
 | Stars | Forks |
 |---|---|
-| ![Stars](docs/images/charts-stars.png) | ![Forks](docs/images/charts-forks.png) |
+| ![Stars](assets/images/charts-stars.png) | ![Forks](assets/images/charts-forks.png) |
 | **Open issues** | **Languages** |
-| ![Issues](docs/images/charts-issues.png) | ![Languages](docs/images/charts-languages.png) |
+| ![Issues](assets/images/charts-issues.png) | ![Languages](assets/images/charts-languages.png) |
 
 ---
 
-## Bonus additions
+## Additions Features
 
 - **Monorepo architecture** — the app is split into three npm workspaces: `apps/web` (the app itself), `packages/ui` (generic components like `Logo`, `Navbar`, `RepoStatsRow`), and `packages/charts` (the chart tab switcher and all four chart types).
 - **Storybook** — stories for the main UI pieces (`RepoCard`, `TrackedCard`, `SearchBar`, `SearchResults`, `Navbar`, `ChartsContainer`), including loading/error/empty states for the ones that depend on the API.
@@ -73,7 +73,11 @@ npm run storybook
 
 | Light | Dark |
 |---|---|
-| ![Light theme](docs/images/theme-light.png) | ![Dark theme](docs/images/theme-dark.png) |
+| ![Light theme](assets/images/theme-light.png) | ![Dark theme](assets/images/theme-dark.png) |
+
+- **Pagination** — search results load more with a "Load more" button, and pages accumulate as you click
+
+![Load more button](assets/images/load-more.png)
 
 - **Clickable repo cards** — cards in both the search results and the tracked list open the repo on GitHub in a new tab
 - **Extra charts** — forks leaderboard, open issues donut, languages breakdown, in addition to the required stars comparison
@@ -82,17 +86,17 @@ npm run storybook
 - **Toast notifications** — feedback when tracking/untracking a repo
 - **Fully responsive layout with framer motion animation**
 
-![Mobile layout](docs/images/mobile.png)
+![Mobile layout](assets/images/mobile.png)
 
 ---
 
 ## Storybook
 
-![Storybook overview](docs/images/storybook-overview.png)
+![Storybook overview](assets/images/storybook-overview.png)
 
 | Navbar (desktop and mobile) | SearchResults states |
 |---|---|
-| ![Navbar story](docs/images/storybook-navbar.png) | ![SearchResults states](docs/images/storybook-states.png) |
+| ![Navbar story](assets/images/storybook-navbar.png) | ![SearchResults states](assets/images/storybook-states.png) |
 
 ---
 
