@@ -54,6 +54,9 @@ npm run storybook
 - Each card has its own independent loading and error state, so if one repo fails to refresh it doesn't break the rest
 - Cards are clickable and open the repo on GitHub in a new tab
 
+**Tracked Card**
+![Tracked Card](assets/images/tracked-card.png)
+
 **Charts**
 - Bar chart comparing stars across tracked repos
 
