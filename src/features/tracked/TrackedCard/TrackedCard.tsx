@@ -45,7 +45,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
       onClick={handleOpenRepo}
       sx={{ cursor: repo ? 'pointer' : 'default' }}
     >
-      <CardContent>
+      <CardContent className={repo ? styles.content : ''}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
             {repo ? (

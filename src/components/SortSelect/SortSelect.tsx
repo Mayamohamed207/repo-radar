@@ -17,6 +17,11 @@ function SortSelect({ value, onChange, options }: SortSelectProps) {
     onChange(event.target.value)
   }
 
+  const getLabel = (val: string) => {
+    const match = options.find((option) => option.value === val)
+    return match ? match.label : ''
+  }
+
   return (
     <FormControl
       size="small"
@@ -27,8 +32,15 @@ function SortSelect({ value, onChange, options }: SortSelectProps) {
         '& .MuiSelect-select': { fontSize: { xs: '0.7rem', sm: '0.85rem' }, py: { xs: 0.5, sm: 1 } },
       }}
     >
-      <InputLabel id="sort-select-label">Sort by</InputLabel>
-      <Select labelId="sort-select-label" label="Sort by" value={value} onChange={handleChange}>
+      <InputLabel id="sort-select-label" shrink>Sort by</InputLabel>
+      <Select
+        labelId="sort-select-label"
+        label="Sort by"
+        value={value}
+        onChange={handleChange}
+        displayEmpty
+        renderValue={getLabel}
+      >
         {options.map((option) => (
           <MenuItem key={option.value} value={option.value} sx={{ fontSize: { xs: '0.8rem', sm: '0.9rem' } }}>
             {option.label}
