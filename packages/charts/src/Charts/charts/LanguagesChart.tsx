@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { PieChart } from '@mui/x-charts/PieChart'
-import type { GithubRepo } from '../../../../types/github'
+import type { GithubRepo } from '../../types/github'
 import { PALETTE } from './chartConstants'
 import ChartBase from './ChartBase'
 

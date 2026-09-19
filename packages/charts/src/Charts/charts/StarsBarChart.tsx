@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
-import type { GithubRepo } from '../../../../types/github'
+import type { GithubRepo } from '../../types/github'
 import { PALETTE, formatCompact } from './chartConstants'
 import ChartBase from './ChartBase'
 

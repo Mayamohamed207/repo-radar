@@ -147,7 +147,7 @@ function TrackedView() {
       <ChartsContainer repos={sortedLiveRepos} />
 
       <Grid container spacing={2}>
-        {trackedRefs.map((ref, index) => (
+        {sortedRefs.map((ref, index) => (
           <Grid key={ref.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <motion.div
               initial={{ opacity: 0, y: 28, scale: 0.96 }}
