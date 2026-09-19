@@ -10,6 +10,7 @@ import TrackedCard from '../TrackedCard/TrackedCard'
 import ChartsContainer from '../Charts/ChartsContainer'
 import SortSelect from '../../search/SortSelect/SortSelect'
 import type { GithubRepo } from '../../../types/github'
+import { motion } from 'framer-motion'
 import styles from './TrackedView.module.css'
 import StatsBar from '../StatsBar/StatsBar'
 
@@ -146,9 +147,15 @@ function TrackedView() {
       <ChartsContainer repos={sortedLiveRepos} />
 
       <Grid container spacing={2}>
-        {sortedRefs.map((ref) => (
+        {trackedRefs.map((ref, index) => (
           <Grid key={ref.id} size={{ xs: 12, sm: 6, md: 4 }}>
-            <TrackedCard repoRef={ref} />
+            <motion.div
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.45, delay: (index % 30) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <TrackedCard repoRef={ref} />
+            </motion.div>
           </Grid>
         ))}
       </Grid>
