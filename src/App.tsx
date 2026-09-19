@@ -57,7 +57,7 @@ function App() {
   return (
     <Box sx={{ minHeight: '100vh', width: '100%', bgcolor: 'background.default' }}>
       <Navbar searchInput={searchInput} onSearchChange={setSearchInput} />
-      <Container maxWidth={false} sx={{ width: '100%', maxWidth: '80rem', mx: 'auto', py: 3, px: { xs: 2, sm: 3 } }}>
+    <Container maxWidth={false} sx={{ width: '100%', maxWidth: '80rem', mx: 'auto', py: { xs: 2, sm: 3, md: 4 }, px: { xs: 2, sm: 3 } }}>
         {hasSearched ? (
           <SearchResults
             status={status}
