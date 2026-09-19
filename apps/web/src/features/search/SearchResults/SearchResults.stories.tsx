@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import SearchResults from './SearchResults'
 import { makeRepo } from '../../../test/makeRepo'
@@ -14,6 +14,11 @@ const meta: Meta<typeof SearchResults> = {
   },
   render: function Render(args) {
     const [sort, setSort] = useState(args.sort)
+
+    useEffect(() => {
+      setSort(args.sort)
+    }, [args.sort])
+
     return <SearchResults {...args} sort={sort} onSortChange={setSort} />
   },
 }
