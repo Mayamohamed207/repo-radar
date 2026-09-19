@@ -75,12 +75,10 @@ npm run storybook
 |---|---|
 | ![Light theme](assets/images/theme-light.png) | ![Dark theme](assets/images/theme-dark.png) |
 
-- **Pagination** — search results load more with a "Load more" button, and pages accumulate as you click
-
-![Load more button](assets/images/load-more.png)
-
-- **Clickable repo cards** — cards in both the search results and the tracked list open the repo on GitHub in a new tab
 - **Extra charts** — forks leaderboard, open issues donut, languages breakdown, in addition to the required stars comparison
+- **Clickable repo cards** — cards in both the search results and the tracked list open the repo on GitHub in a new tab
+- **Pagination** — search results load more with a "Load more" button, and pages accumulate as you click
+![Load more button](assets/images/load-more.png)
 - **A stats strip** — totals stars/issues/forks across everything tracked, so you get a sense of the whole list at a glance
 - **Sort options** — both search results and tracked repos can be sorted (stars/forks/open issues/recently updated), not just displayed in fetch order
 - **Toast notifications** — feedback when tracking/untracking a repo
