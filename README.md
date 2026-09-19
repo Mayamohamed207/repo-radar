@@ -86,7 +86,11 @@ npm run storybook
 - **Toast notifications** — feedback when tracking/untracking a repo
 - **Fully responsive layout with framer motion animation**
 
-![Mobile layout](assets/images/mobile.png)
+| Mobile | Tablet |
+|---|---|
+| ![Mobile layout](assets/images/mobile.png) | ![Tablet layout](assets/images/tablet.png) |
+
+![Desktop layout](assets/images/desktop.png)
 
 ---
 
@@ -94,9 +98,7 @@ npm run storybook
 
 ![Storybook overview](assets/images/storybook-overview.png)
 
-| Navbar (desktop and mobile) | SearchResults states |
-|---|---|
-| ![Navbar story](assets/images/storybook-navbar.png) | ![SearchResults states](assets/images/storybook-states.png) |
+![SearchResults states](assets/images/storybook-states.png)
 
 ---
 

@@ -68,6 +68,7 @@ export const LoadingMore: Story = {
     results: [
       makeRepo({ id: 1, full_name: 'facebook/react' }),
       makeRepo({ id: 2, full_name: 'vuejs/vue', stargazers_count: 45900 }),
+      makeRepo({ id: 3, full_name: 'angular/angular', stargazers_count: 95000 }),
     ],
     hasMore: true,
     loadingMore: true,
