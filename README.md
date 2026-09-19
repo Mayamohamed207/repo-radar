@@ -81,6 +81,7 @@ npm run storybook
 ![Load more button](assets/images/load-more.png)
 - **A stats strip** — totals stars/issues/forks across everything tracked, so you get a sense of the whole list at a glance
 - **Sort options** — both search results and tracked repos can be sorted (stars/forks/open issues/recently updated), not just displayed in fetch order
+![Sort Options](assets/images/sort.png)
 - **Toast notifications** — feedback when tracking/untracking a repo
 - **Fully responsive layout with framer motion animation**
 
@@ -101,7 +102,7 @@ npm run storybook
 
 **Charts**
 
-![SearchResults states](assets/images/storybook-states.png)
+![SearchResults states](assets/images/storybook-charts.png)
 ---
 
 ## Folder structure
