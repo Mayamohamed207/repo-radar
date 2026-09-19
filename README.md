@@ -65,7 +65,7 @@ npm run storybook
 
 ---
 
-## Additions Features
+## Additional Features
 
 - **Monorepo architecture** — the app is split into three npm workspaces: `apps/web` (the app itself), `packages/ui` (generic components like `Logo`, `Navbar`, `RepoStatsRow`), and `packages/charts` (the chart tab switcher and all four chart types).
 - **Storybook** — stories for the main UI pieces (`RepoCard`, `TrackedCard`, `SearchBar`, `SearchResults`, `Navbar`, `ChartsContainer`), including loading/error/empty states for the ones that depend on the API.
@@ -90,16 +90,20 @@ npm run storybook
 |---|---|
 | ![Mobile layout](assets/images/mobile.png) | ![Tablet layout](assets/images/tablet.png) |
 
+**Desktop**
 ![Desktop layout](assets/images/desktop.png)
 
 ---
 
 ## Storybook
 
+**SearchResults states (loading, empty, rate-limit error)**
+
 ![Storybook overview](assets/images/storybook-overview.png)
 
-![SearchResults states](assets/images/storybook-states.png)
+**Charts**
 
+![SearchResults states](assets/images/storybook-states.png)
 ---
 
 ## Folder structure
