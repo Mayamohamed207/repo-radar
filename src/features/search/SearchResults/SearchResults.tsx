@@ -1,4 +1,5 @@
 import { Grid, Typography, Skeleton, Box, Button, CircularProgress } from '@mui/material'
+import { motion } from 'framer-motion'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import RepoCard from '../RepoCard/RepoCard'
 import SortSelect from '../SortSelect/SortSelect'
@@ -87,9 +88,15 @@ function SearchResults({
 
       {status === 'success' && results.length > 0 && (
         <Grid container spacing={2}>
-          {results.map((repo) => (
+          {results.map((repo, index) => (
             <Grid key={repo.id} size={{ xs: 12, sm: 6, md: 4 }}>
-              <RepoCard repo={repo} />
+              <motion.div
+                initial={{ opacity: 0, y: 28, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.45, delay: (index % 30) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <RepoCard repo={repo} />
+              </motion.div>
             </Grid>
           ))}
         </Grid>
