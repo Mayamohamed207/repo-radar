@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Box, Typography, Button, Grid } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
+import RadarIcon from '@mui/icons-material/Radar'
 import { useSelector, useDispatch } from 'react-redux'
 import type { RootState, AppDispatch } from '../../../store/store'
 import { githubApi } from '../../../api/githubApi'
@@ -10,6 +11,7 @@ import ChartsContainer from '../Charts/ChartsContainer'
 import SortSelect from '../../../components/SortSelect/SortSelect'
 import type { GithubRepo } from '../../../types/github'
 import styles from './TrackedView.module.css'
+import StatsBar from '../StatsBar/StatsBar'
 
 type TrackedSort = 'stars' | 'forks' | 'issues' | 'updated'
 
@@ -75,6 +77,7 @@ function TrackedView() {
   if (trackedRefs.length === 0) {
     return (
       <Box className={styles.empty}>
+        <RadarIcon sx={{ fontSize: { xs: '3rem', sm: '4rem' }, color: 'var(--color-border)', mb: 2 }} />
         <Typography
           sx={{
             fontWeight: 800,
@@ -136,6 +139,9 @@ function TrackedView() {
           </Button>
         </Box>
       </Box>
+
+
+      <StatsBar repos={sortedLiveRepos} />
 
       <ChartsContainer repos={sortedLiveRepos} />
 
