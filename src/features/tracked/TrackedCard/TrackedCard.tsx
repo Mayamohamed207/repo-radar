@@ -15,10 +15,22 @@ interface TrackedCardProps {
   repoRef: TrackedRepoRef
 }
 
+function getErrorMessage(error: unknown, hasRepo: boolean): string {
+  const status = typeof error === 'object' && error !== null && 'status' in error ? error.status : undefined
+
+  if (status === 404) {
+    return 'This repository no longer exists on GitHub'
+  }
+  if (status === 403) {
+    return 'GitHub rate limit reached - try again shortly'
+  }
+  return hasRepo ? 'Failed to refresh latest stats' : 'Failed to load repository'
+}
+
 function TrackedCard({ repoRef }: TrackedCardProps) {
   const dispatch = useDispatch<AppDispatch>()
   const { showToast } = useToast()
-  const { data: repo, isLoading, isFetching, isError, refetch } =
+  const { data: repo, isLoading, isFetching, isError, error, refetch } =
     useGetRepoByFullNameQuery(repoRef.full_name)
 
   const commitDate = repo?.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
@@ -64,7 +76,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
 
         {isError && (
           <Typography variant="caption" color="error" sx={{ display: 'block', mb: 0.5 }}>
-            {repo ? 'Failed to refresh latest stats' : 'Failed to load repository'}
+            {getErrorMessage(error, Boolean(repo))}
           </Typography>
         )}
 
