@@ -11,9 +11,10 @@ import styles from './Navbar.module.css'
 interface NavbarProps {
   searchInput: string
   onSearchChange: (value: string) => void
+  onLogoClick?: () => void
 }
 
-function Navbar({ searchInput, onSearchChange }: NavbarProps) {
+function Navbar({ searchInput, onSearchChange, onLogoClick }: NavbarProps) {
   const { mode, systemMode, setMode } = useColorScheme()
   const effectiveMode = mode === 'system' ? systemMode : mode
   const isDark = effectiveMode === 'dark'
@@ -36,7 +37,7 @@ function Navbar({ searchInput, onSearchChange }: NavbarProps) {
       className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}
     >
       <Toolbar className={styles.toolbar}>
-        <Logo />
+        <Logo onClick={onLogoClick} />
         <div className={styles.searchWrapper}>
           <SearchBar value={searchInput} onChange={onSearchChange} />
         </div>

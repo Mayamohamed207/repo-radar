@@ -1,9 +1,22 @@
 import { Box, Typography } from '@mui/material'
 import RadarIcon from '@mui/icons-material/Radar'
 
-function Logo() {
+interface LogoProps {
+  onClick?: () => void
+}
+
+function Logo({ onClick }: LogoProps) {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexShrink: 0 }}>
+    <Box
+      onClick={onClick}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 0.75,
+        flexShrink: 0,
+        cursor: onClick ? 'pointer' : 'default',
+      }}
+    >
       <Box
         sx={{
           display: 'flex',

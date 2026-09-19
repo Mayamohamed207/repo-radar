@@ -9,7 +9,11 @@ function App() {
 
   return (
     <Box sx={{ minHeight: '100vh', width: '100%', bgcolor: 'background.default' }}>
-      <Navbar searchInput={search.searchInput} onSearchChange={search.setSearchInput} />
+      <Navbar
+        searchInput={search.searchInput}
+        onSearchChange={search.setSearchInput}
+        onLogoClick={search.reset}
+      />
       <Container
         maxWidth={false}
         sx={{ width: '100%', maxWidth: '80rem', mx: 'auto', py: { xs: 2, sm: 3, md: 4 }, px: { xs: 2, sm: 3 } }}
