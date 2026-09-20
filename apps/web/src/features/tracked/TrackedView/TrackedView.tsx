@@ -40,7 +40,7 @@ function TrackedView() {
   const dispatch = useDispatch<AppDispatch>()
   const trackedRefs = useSelector((state: RootState) => state.tracked.repos)
   const liveRepos = useTrackedRepoData()
-  const [refreshClicked, setRefreshClicked] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [sort, setSort] = useState<TrackedSort>('stars')
 
   const liveDataById = useMemo(() => {
@@ -53,7 +53,9 @@ function TrackedView() {
     return [...trackedRefs].sort((a, b) => {
       const repoA = liveDataById.get(a.id)
       const repoB = liveDataById.get(b.id)
-      if (!repoA || !repoB) return 0
+      if (!repoA && !repoB) return 0
+      if (!repoA) return 1
+      if (!repoB) return -1
       return getSortValue(repoB, sort) - getSortValue(repoA, sort)
     })
   }, [trackedRefs, liveDataById, sort])
@@ -62,17 +64,19 @@ function TrackedView() {
     return [...liveRepos].sort((a, b) => getSortValue(b, sort) - getSortValue(a, sort))
   }, [liveRepos, sort])
 
-  const handleRefreshAll = () => {
-    setRefreshClicked(true)
-    trackedRefs.forEach((ref) => {
-      dispatch(
-        githubApi.endpoints.getRepoByFullName.initiate(ref.full_name, {
-          subscribe: false,
-          forceRefetch: true,
-        })
+  const handleRefreshAll = async () => {
+    setIsRefreshing(true)
+    await Promise.allSettled(
+      trackedRefs.map((ref) =>
+        dispatch(
+          githubApi.endpoints.getRepoByFullName.initiate(ref.full_name, {
+            subscribe: false,
+            forceRefetch: true,
+          })
+        )
       )
-    })
-    setTimeout(() => setRefreshClicked(false), 500)
+    )
+    setIsRefreshing(false)
   }
 
   if (trackedRefs.length === 0) {
@@ -124,9 +128,9 @@ function TrackedView() {
           <Button
             size="small"
             variant="outlined"
-            startIcon={<RefreshIcon sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' } }} className={refreshClicked ? styles.spinning : ''} />}
+            startIcon={<RefreshIcon sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' } }} className={isRefreshing ? styles.spinning : ''} />}
             onClick={handleRefreshAll}
-            disabled={refreshClicked}
+            disabled={isRefreshing}
             sx={{
               textTransform: 'none',
               fontSize: { xs: '0.65rem', sm: '0.85rem' },
