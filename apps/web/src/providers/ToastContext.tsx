@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback, type ReactNode } from 'react'
+import { createContext, useState, useCallback, useMemo, type ReactNode } from 'react'
 import { Snackbar, Box, Typography, Slide } from '@mui/material'
 import type { SlideProps } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
@@ -28,6 +28,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setOpen(true)
   }, [])
 
+  const contextValue = useMemo(() => ({ showToast }), [showToast])
+
   const handleClose = () => {
     setOpen(false)
   }
@@ -44,7 +46,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={contextValue}>
       {children}
       <Snackbar
         open={open}
