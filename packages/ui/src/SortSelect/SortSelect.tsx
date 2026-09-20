@@ -32,7 +32,7 @@ function SortSelect({ value, onChange, options }: SortSelectProps) {
         '& .MuiSelect-select': { fontSize: { xs: '0.7rem', sm: '0.85rem' }, py: { xs: 0.5, sm: 1 } },
       }}
     >
-      <InputLabel id="sort-select-label" shrink>Sort by</InputLabel>
+      <InputLabel id="sort-select-label" component="span" shrink>Sort by</InputLabel>
       <Select
         labelId="sort-select-label"
         label="Sort by"
