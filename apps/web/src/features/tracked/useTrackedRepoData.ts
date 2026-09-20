@@ -1,22 +1,17 @@
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { createSelector } from '@reduxjs/toolkit'
+import { shallowEqual, useSelector } from 'react-redux'
 import type { RootState } from '../../store/store'
 import { githubApi } from '../../api/githubApi'
-import type { GithubRepo, TrackedRepoRef } from '../../types/github'
-
-function makeSelectLiveRepos(trackedRefs: TrackedRepoRef[]) {
-  return createSelector(
-    (state: RootState) => state,
-    (state: RootState) =>
-      trackedRefs
-        .map((ref) => githubApi.endpoints.getRepoByFullName.select(ref.full_name)(state).data)
-        .filter((repo): repo is GithubRepo => repo !== undefined)
-  )
-}
+import type { GithubRepo } from '../../types/github'
 
 export function useTrackedRepoData(): GithubRepo[] {
   const trackedRefs = useSelector((state: RootState) => state.tracked.repos)
-  const selectLiveRepos = useMemo(() => makeSelectLiveRepos(trackedRefs), [trackedRefs])
-  return useSelector(selectLiveRepos)
+
+  const repos = useSelector(
+    (state: RootState) =>
+      trackedRefs.map((ref) => githubApi.endpoints.getRepoByFullName.select(ref.full_name)(state).data),
+    shallowEqual
+  )
+
+  return useMemo(() => repos.filter((repo): repo is GithubRepo => repo !== undefined), [repos])
 }
