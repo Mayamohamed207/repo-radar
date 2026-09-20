@@ -7,9 +7,13 @@ import type { GithubRepo } from '../../types/github'
 export function useTrackedRepoData(): GithubRepo[] {
   const trackedRefs = useSelector((state: RootState) => state.tracked.repos)
 
+  const selectors = useMemo(
+    () => trackedRefs.map((ref) => githubApi.endpoints.getRepoByFullName.select(ref.full_name)),
+    [trackedRefs]
+  )
+
   const repos = useSelector(
-    (state: RootState) =>
-      trackedRefs.map((ref) => githubApi.endpoints.getRepoByFullName.select(ref.full_name)(state).data),
+    (state: RootState) => selectors.map((select) => select(state).data),
     shallowEqual
   )
 
