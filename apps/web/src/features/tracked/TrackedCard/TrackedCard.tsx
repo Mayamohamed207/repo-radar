@@ -1,3 +1,4 @@
+import { useState } from 'react' 
 import type { MouseEvent } from 'react'
 import { Card, CardContent, Typography, Box, Avatar, IconButton, Button, Skeleton } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
@@ -31,9 +32,11 @@ function getErrorMessage(error: unknown, hasRepo: boolean): string {
 function TrackedCard({ repoRef }: TrackedCardProps) {
   const dispatch = useDispatch<AppDispatch>()
   const { showToast } = useToast()
+  const [isRefreshing, setIsRefreshing] = useState(false) 
   const { data: repo, isLoading, isFetching, isError, error, refetch } =
     useGetRepoByFullNameQuery(repoRef.full_name)
 
+  const busy = isRefreshing || isFetching 
   const commitDate = repo?.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
   const description = repo ? repo.description || 'No description provided' : 'No data available'
 
@@ -41,9 +44,15 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
     if (repo) window.open(repo.html_url, '_blank', 'noopener,noreferrer')
   }
 
-  const handleRefresh = (event: MouseEvent) => {
+  const handleRefresh = async (event: MouseEvent) => {
     event.stopPropagation()
-    refetch()
+    setIsRefreshing(true)
+    const minimumDelay = new Promise((resolve) => setTimeout(resolve, 500))
+    const [result] = await Promise.all([refetch(), minimumDelay])
+    setIsRefreshing(false)
+    if (!result.isError) {
+      showToast(`${repoRef.full_name} refreshed`, 'info')
+    }
   }
 
   const handleUntrack = (event: MouseEvent) => {
@@ -54,7 +63,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
 
   return (
     <Card
-      className={styles.card}
+      className={`${styles.card} ${busy ? styles.refreshing : ''}`} 
       variant="outlined"
       onClick={handleOpenRepo}
       sx={{ cursor: repo ? 'pointer' : 'default' }}
@@ -71,8 +80,8 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
               {repoRef.full_name}
             </Typography>
           </Box>
-          <IconButton size="small" onClick={handleRefresh} disabled={isFetching || isLoading}>
-            <RefreshIcon fontSize="small" className={isFetching ? styles.spinning : ''} />
+          <IconButton size="small" onClick={handleRefresh} disabled={busy || isLoading}> 
+            <RefreshIcon fontSize="small" className={busy ? styles.spinning : ''} /> 
           </IconButton>
         </Box>
 
