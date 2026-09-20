@@ -11,6 +11,7 @@ import { ChartsContainer } from "@repo-radar/charts";
 import { SortSelect } from "@repo-radar/ui";
 import type { GithubRepo } from '../../../types/github'
 import { motion } from 'framer-motion'
+import { useToast } from '../../../providers/useToast'
 import styles from './TrackedView.module.css'
 import StatsBar from '../StatsBar/StatsBar'
 
@@ -38,6 +39,7 @@ function getSortValue(repo: GithubRepo, sort: TrackedSort): number {
 
 function TrackedView() {
   const dispatch = useDispatch<AppDispatch>()
+  const { showToast } = useToast()
   const trackedRefs = useSelector((state: RootState) => state.tracked.repos)
   const liveRepos = useTrackedRepoData()
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -66,17 +68,26 @@ function TrackedView() {
 
   const handleRefreshAll = async () => {
     setIsRefreshing(true)
-    await Promise.allSettled(
-      trackedRefs.map((ref) =>
-        dispatch(
-          githubApi.endpoints.getRepoByFullName.initiate(ref.full_name, {
-            subscribe: false,
-            forceRefetch: true,
-          })
+    const minimumDelay = new Promise((resolve) => setTimeout(resolve, 600))
+    const [results] = await Promise.all([
+      Promise.allSettled(
+        trackedRefs.map((ref) =>
+          dispatch(
+            githubApi.endpoints.getRepoByFullName.initiate(ref.full_name, {
+              subscribe: false,
+              forceRefetch: true,
+            })
+          )
         )
-      )
-    )
+      ),
+      minimumDelay,
+    ])
     setIsRefreshing(false)
+    const failed = results.some((result) => result.status === 'rejected' || result.value.isError)
+    showToast(
+      failed ? 'Some repositories failed to refresh' : 'All repositories refreshed',
+      failed ? 'error' : 'info'
+    )
   }
 
   if (trackedRefs.length === 0) {
