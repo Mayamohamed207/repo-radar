@@ -18,6 +18,7 @@ const SORT_OPTIONS = [
 
 interface SearchResultsProps {
   status: SearchStatus
+  errorMessage: string | null
   results: GithubRepo[]
   hasMore: boolean
   loadingMore: boolean
@@ -29,6 +30,7 @@ interface SearchResultsProps {
 
 function SearchResults({
   status,
+  errorMessage,
   results,
   hasMore,
   loadingMore,
@@ -37,6 +39,8 @@ function SearchResults({
   onLoadMore,
   onBack,
 }: SearchResultsProps) {
+  const loadMoreLabel = loadingMore ? 'Loading more...' : errorMessage ? 'Try again' : 'Load more'
+
   return (
     <Box>
       <Box className={styles.header}>
@@ -76,7 +80,7 @@ function SearchResults({
 
       {status === 'error' && (
         <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
-          GitHub API rate limit reached (60 requests/hour).
+          {errorMessage}
         </Typography>
       )}
 
@@ -102,6 +106,12 @@ function SearchResults({
         </Grid>
       )}
 
+      {status === 'success' && errorMessage && (
+        <Typography color="error" variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+          {errorMessage}
+        </Typography>
+      )}
+
       {status === 'success' && hasMore && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
           <Button
@@ -111,7 +121,7 @@ function SearchResults({
             startIcon={loadingMore ? <CircularProgress size={16} /> : null}
             sx={{ textTransform: 'none', minWidth: '9rem' }}
           >
-            {loadingMore ? 'Loading more...' : 'Load more'}
+            {loadMoreLabel}
           </Button>
         </Box>
       )}

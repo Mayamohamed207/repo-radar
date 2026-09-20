@@ -7,6 +7,7 @@ const meta: Meta<typeof SearchResults> = {
   title: 'Features/SearchResults',
   component: SearchResults,
   args: {
+    errorMessage: null,
     sort: 'stars',
     onSortChange: () => {},
     onLoadMore: () => {},
@@ -27,14 +28,16 @@ export default meta
 
 type Story = StoryObj<typeof SearchResults>
 
+const sampleResults = [
+  makeRepo({ id: 1, full_name: 'facebook/react' }),
+  makeRepo({ id: 2, full_name: 'vuejs/vue', stargazers_count: 45900 }),
+  makeRepo({ id: 3, full_name: 'angular/angular', stargazers_count: 95000 }),
+]
+
 export const WithResults: Story = {
   args: {
     status: 'success',
-    results: [
-      makeRepo({ id: 1, full_name: 'facebook/react' }),
-      makeRepo({ id: 2, full_name: 'vuejs/vue', stargazers_count: 45900 }),
-      makeRepo({ id: 3, full_name: 'angular/angular', stargazers_count: 95000 }),
-    ],
+    results: sampleResults,
     hasMore: true,
     loadingMore: false,
   },
@@ -61,6 +64,7 @@ export const Loading: Story = {
 export const RateLimitError: Story = {
   args: {
     status: 'error',
+    errorMessage: 'GitHub search limit reached (10 searches per minute). Wait a moment and try again.',
     results: [],
     hasMore: false,
     loadingMore: false,
@@ -70,12 +74,18 @@ export const RateLimitError: Story = {
 export const LoadingMore: Story = {
   args: {
     status: 'success',
-    results: [
-      makeRepo({ id: 1, full_name: 'facebook/react' }),
-      makeRepo({ id: 2, full_name: 'vuejs/vue', stargazers_count: 45900 }),
-      makeRepo({ id: 3, full_name: 'angular/angular', stargazers_count: 95000 }),
-    ],
+    results: sampleResults,
     hasMore: true,
     loadingMore: true,
+  },
+}
+
+export const LoadMoreFailed: Story = {
+  args: {
+    status: 'success',
+    errorMessage: 'GitHub search limit reached (10 searches per minute). Wait a moment and try again.',
+    results: sampleResults,
+    hasMore: true,
+    loadingMore: false,
   },
 }

@@ -23,6 +23,7 @@ function App() {
         {search.hasSearched ? (
           <SearchResults
             status={search.status}
+            errorMessage={search.errorMessage}
             results={search.results}
             hasMore={search.hasMore}
             loadingMore={search.loadingMore}
