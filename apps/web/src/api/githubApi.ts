@@ -25,4 +25,4 @@ export const githubApi = createApi({
   }),
 })
 
-export const { useSearchReposQuery, useGetRepoByFullNameQuery, useLazySearchReposQuery } = githubApi
+export const { useSearchReposQuery, useGetRepoByFullNameQuery } = githubApi
