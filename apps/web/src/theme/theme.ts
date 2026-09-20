@@ -34,4 +34,11 @@ export const theme = createTheme({
   shape: {
     borderRadius: 8,
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: { textTransform: 'none' },
+      },
+    },
+  },
 })

@@ -102,7 +102,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
             color="error"
             startIcon={<BookmarkRemoveIcon />}
             onClick={handleUntrack}
-            sx={{ textTransform: 'none', ml: 'auto' }}
+            sx={{ ml: 'auto' }}
           >
             Untrack
           </Button>

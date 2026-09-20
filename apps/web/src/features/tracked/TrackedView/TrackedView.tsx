@@ -132,7 +132,6 @@ function TrackedView() {
             onClick={handleRefreshAll}
             disabled={isRefreshing}
             sx={{
-              textTransform: 'none',
               fontSize: { xs: '0.65rem', sm: '0.85rem' },
               whiteSpace: 'nowrap',
               minWidth: 'unset',

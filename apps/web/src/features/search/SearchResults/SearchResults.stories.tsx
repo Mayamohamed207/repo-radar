@@ -64,7 +64,7 @@ export const Loading: Story = {
 export const RateLimitError: Story = {
   args: {
     status: 'error',
-    errorMessage: 'GitHub search limit reached (10 searches per minute). Wait a moment and try again.',
+    errorMessage: 'GitHub search limit reached. Wait a moment and try again.',
     results: [],
     hasMore: false,
     loadingMore: false,
@@ -83,7 +83,7 @@ export const LoadingMore: Story = {
 export const LoadMoreFailed: Story = {
   args: {
     status: 'success',
-    errorMessage: 'GitHub search limit reached (10 searches per minute). Wait a moment and try again.',
+    errorMessage: 'GitHub search limit reached. Wait a moment and try again.',
     results: sampleResults,
     hasMore: true,
     loadingMore: false,

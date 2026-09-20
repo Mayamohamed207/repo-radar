@@ -65,7 +65,7 @@ function RepoCard({ repo }: RepoCardProps) {
             color={isTracked ? 'error' : 'primary'}
             startIcon={isTracked ? <BookmarkRemoveIcon /> : <BookmarkAddOutlinedIcon />}
             onClick={handleToggleTrack}
-            sx={{ textTransform: 'none', borderRadius: '0.5rem' }}
+            sx={{ borderRadius: '0.5rem' }}
           >
             {isTracked ? 'Untrack' : 'Track'}
           </Button>
