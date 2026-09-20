@@ -5,9 +5,8 @@ import RepoCard from '../RepoCard/RepoCard'
 import { SortSelect } from "@repo-radar/ui";
 import type { GithubRepo } from '../../../types/github'
 import type { SearchSort } from '../../../api/githubApi'
+import type { SearchStatus } from '../useRepoSearch'
 import styles from './SearchResults.module.css'
-
-type SearchStatus = 'loading' | 'success' | 'error'
 
 const SORT_OPTIONS = [
   { value: '', label: 'Best match' },
