@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '../../../store/store'
 import { untrackRepo } from '../trackedRepos'
 import { useGetRepoByFullNameQuery } from '../../../api/githubApi'
+import { getErrorStatus } from '../../../api/getErrorStatus'
 import type { TrackedRepoRef } from '../../../types/github'
 import { RepoStatsRow } from "@repo-radar/ui";
 import { useToast } from '../../../providers/useToast'
@@ -16,7 +17,7 @@ interface TrackedCardProps {
 }
 
 function getErrorMessage(error: unknown, hasRepo: boolean): string {
-  const status = typeof error === 'object' && error !== null && 'status' in error ? error.status : undefined
+  const status = getErrorStatus(error)
 
   if (status === 404) {
     return 'This repository no longer exists on GitHub'
