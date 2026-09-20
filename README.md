@@ -11,11 +11,11 @@ A dashboard where you can search GitHub repos, track the ones you care about, an
 
 - React 19 + TypeScript
 - Redux Toolkit + RTK Query (state + data fetching)
-- MUI (components + theming)
-- MUI X Charts (the bar/donut charts)
+- MUI 
+- Framer Motion 
 - GitHub REST API (`api.github.com`)
 - Vite
-- Storybook (component stories for the main UI pieces)
+- Storybook 
 - Monorepo: shared UI and charts split into their own packages
 
 ---
@@ -34,17 +34,18 @@ To run Storybook:
 ```bash
 npm run storybook
 ```
-
 ---
 
 ## What it does
 
 **Search**
 - Debounced search against GitHub's repo search API (waits 500ms after you stop typing before firing a request, so it's not spamming the API on every keystroke)
-- Pagination via a "Load more" button
-- Loading skeletons, an empty state, and a rate-limit error state
+- Pagination via a "Load more" button, pages accumulate as you click
+- Loading skeletons, an empty state, and error messages based on what actually failed
+- If "Load more" fails, the results you already have stay on screen and the button changes to "Try again"
 
 ![Search results](assets/images/search.png)
+![Load more button](assets/images/load-more.png)
 
 **Tracking**
 - Track / untrack any repo from search results
@@ -53,10 +54,11 @@ npm run storybook
 - Refresh a single repo, or hit "Refresh All" to pull fresh data for everything you're tracking
 - Each card has its own independent loading and error state, so if one repo fails to refresh it doesn't break the rest
 - Cards are clickable and open the repo on GitHub in a new tab
+
 <p align="center"> <img src="assets/images/tracked-card.png" alt="Tracked Card"> </p>
 
 **Charts**
-- Bar chart comparing stars across tracked repos
+- Bar chart comparing stars across tracked repos, plus forks, open issues and languages
 
 | Stars | Forks |
 |---|---|
@@ -68,23 +70,23 @@ npm run storybook
 
 ## Additional Features
 
-- **Monorepo architecture** — the app is split into three npm workspaces: `apps/web` (the app itself), `packages/ui` (generic components like `Logo`, `Navbar`, `RepoStatsRow`), and `packages/charts` (the chart tab switcher and all four chart types).
-- **Storybook** — stories for the main UI pieces (`RepoCard`, `TrackedCard`, `SearchBar`, `SearchResults`, `Navbar`, `ChartsContainer`), including loading/error/empty states for the ones that depend on the API.
-- **Theme switching** — dark/light toggle, persisted automatically via MUI's color scheme storage
+- **Monorepo architecture:** the app is split into three npm workspaces: `apps/web` (the app itself), `packages/ui` (generic components like `Logo`, `Navbar`, `RepoStatsRow`, `SortSelect`), and `packages/charts` (the chart tab switcher and all four chart types).
+- **Storybook:** stories for the main UI pieces (`RepoCard`, `TrackedCard`, `SearchBar`, `SearchResults`, `Navbar`, `ChartsContainer`), including loading, error and empty states for the ones that depend on the API.
+- **Theme switching:** dark/light toggle, saved automatically by MUI's color scheme storage.
 
 | Light | Dark |
 |---|---|
 | ![Light theme](assets/images/theme-light.png) | ![Dark theme](assets/images/theme-dark.png) |
 
-- **Extra charts** — forks leaderboard, open issues donut, languages breakdown, in addition to the required stars comparison
+- **Extra charts:** forks leaderboard, open issues donut, languages breakdown, in addition to the required stars chart.
 - **Clickable repo cards** — cards in both the search results and the tracked list open the repo on GitHub in a new tab
-- **Pagination** — search results load more with a "Load more" button, and pages accumulate as you click
-![Load more button](assets/images/load-more.png)
-- **A stats strip** — totals stars/issues/forks across everything tracked, so you get a sense of the whole list at a glance
-- **Sort options** — both search results and tracked repos can be sorted (stars/forks/open issues/recently updated), not just displayed in fetch order
+- **A stats strip:** totals stars, issues and forks across everything tracked.
+- **Sort options:** search results and tracked repos can be sorted (stars, forks, open issues, recently updated).
+
 ![Sort Options](assets/images/sort.png)
-- **Toast notifications** — feedback when tracking/untracking a repo
-- **Fully responsive layout with framer motion animation**
+
+- **Toast notifications:** feedback when tracking or untracking a repo.
+- **Responsive layout with Framer Motion animations.**
 
 | Mobile | Tablet |
 |---|---|
@@ -97,13 +99,14 @@ npm run storybook
 
 ## Storybook
 
-**SearchResults states (loading, empty, rate-limit error)**
+**SearchResults states (loading, empty, error)**
 
-![Storybook overview](assets/images/storybook-overview.png)
+![SearchResults states](assets/images/storybook-overview.png)
 
 **Charts**
 
-![SearchResults states](assets/images/storybook-charts.png)
+![Charts](assets/images/storybook-charts.png)
+
 ---
 
 ## Folder structure
@@ -113,20 +116,21 @@ repo-radar/
   apps/
     web/                  The actual application
       src/
-        api/              GitHub API setup (RTK Query endpoints)
+        api/              GitHub API setup (RTK Query endpoints) and a helper
+                          that reads the status code from a failed request
         features/
           search/         Everything about searching: SearchBar, SearchResults,
-                           RepoCard, and useRepoSearch (the hook that owns the
-                           whole search flow: debounce, pagination, status)
+                          RepoCard, and useRepoSearch (the hook that owns the
+                          whole search flow: debounce, pagination, status)
           tracked/        Everything about tracked repos: TrackedCard, TrackedView,
-                           StatsBar, the Redux slice, the live-data selector
-        providers/        App-wide React Context providers
-        hooks/            
+                          StatsBar, the Redux slice, useTrackedRepoData
+        providers/        App-wide React Context providers (toasts)
+        hooks/            Small reusable hooks 
         store/            Redux store setup
         theme/            MUI theme
         styles/           CSS variables (light/dark tokens)
         types/            Shared TypeScript types
-        test/             Shared test for stories 
+        test/             Sample data used by the Storybook stories
       .storybook/         Storybook config
   packages/
     ui/                   Generic components used across the app: Logo, Navbar,
@@ -140,19 +144,17 @@ repo-radar/
 
 ## Architecture and technical decisions
 
-**Why a monorepo.** Splitting `ui` and `charts` into their own packages keeps them reusable and independent of the app: `ui` knows nothing about Redux, and `charts` just takes an array of repos. The structure is also scalable, since new apps or packages can be added without restructuring. Unlike a polyrepo, where every shared change means publishing a package and bumping versions in each consumer, npm workspaces link everything locally, so changes show up in the app immediately, with one clone and one `npm install`.
+**Why a monorepo.** Splitting `ui` and `charts` into their own packages keeps them reusable and independent of the app: `ui` knows nothing about Redux, and `charts` just takes an array of repos. New apps or packages can be added without restructuring. Unlike a polyrepo, where every shared change means publishing a package and versions in each consumer, npm workspaces link everything locally, so changes show up in the app immediately, with one clone and one `npm install`.
 
-**Why RTK Query instead of `useState` + `fetch`.** Caching, loading/error flags, and refetching come built in. This matters most for independent loading states: each `TrackedCard` calls `useGetRepoByFullNameQuery` on its own, so it gets its own `isFetching` and `isError` with no manual wiring between components. If one repo's request fails (deleted repo, rate limit), the others are unaffected, and RTK Query's cache means switching away and back doesn't trigger unnecessary refetches.
+**Why RTK Query instead of `useState` + `fetch`.** Caching, loading/error flags, and refetching come built in. This matters most for independent loading states: each `TrackedCard` calls `useGetRepoByFullNameQuery` on its own, so it gets its own `isFetching` and `isError` with no manual wiring between components. If one repo's request fails (deleted repo, rate limit), the others are unaffected.
 
-**Tracked repos remember what, not what-it-looked-like.** The Redux slice only stores `{ id, full_name }` per tracked repo, never the stats. Stars, issues, forks always come live from RTK Query's cache. That way there's exactly one place that knows what a repo's numbers currently are, instead of a Redux copy and a cache copy that could quietly drift apart. `localStorage` only remembers which repos you're tracking, nothing about their state at some past moment. Reading that live data back out (for the charts, the stats strip) goes through a small selector built with `createSelector`, so it doesn't get flagged as producing a new array on every render for no reason.
+**Tracked repos store only `{ id, full_name }`.** The Redux slice never stores stats. Stars, issues and forks always come from RTK Query's cache, so there is one place that knows a repo's current numbers instead of two copies that could drift apart. `localStorage` saves only the list of tracked repos, so a page reload always fetches fresh stats. The dashboard reads each tracked repo's cached data through a small hook, `useTrackedRepoData`, and it only re-renders when a repo's data actually changes.
 
-**Each tracked card fetches independently.** That's what makes the loading/error states genuinely independent per card, if one repo's request fails (deleted repo, rate limit), it doesn't touch the others, and RTK Query's own caching means switching away and back doesn't refetch unnecessarily.
+**Failures aren't all the same failure.** A 404 means the repo was deleted or renamed, while a 403 means the rate limit was hit. `TrackedCard` checks the actual status and shows a matching message instead of a generic "something went wrong". Search works the same way: 403 or 429 shows the search limit message, 422 says GitHub couldn't run the search, and anything else gets a generic message.
 
-**Failures aren't all the same failure.** A 404 means the repo was deleted or renamed, while a 403 means the rate limit was hit. `TrackedCard` checks the actual status and shows a matching message instead of a generic "something went wrong."
+**Search pagination lives in one place.** Debouncing, accumulating pages as "Load more" gets clicked, resetting to page 1 when the term or sort changes, and turning RTK Query's raw loading/error flags into one status and one error message all happen in a single hook, `useRepoSearch`. `App.tsx` just renders what the hook returns.
 
-**Search pagination lives in one place.** Debouncing, accumulating pages as "Load more" gets clicked, resetting everything when the term or sort changes, and collapsing GitHub's raw loading/error flags into one status, all of it in a single hook, `useRepoSearch`. `App.tsx` just renders whatever comes back from it, rather than the state itself.
-
-**Toasts live in Context, not Redux.** Track/untrack confirmations are transient UI feedback.
+**Toasts live in Context, not Redux.** Track/untrack confirmations are short-lived UI feedback, not app data, so they don't need to go through the store.
 
 ---
 
