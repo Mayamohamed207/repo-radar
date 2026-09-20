@@ -35,6 +35,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
     useGetRepoByFullNameQuery(repoRef.full_name)
 
   const commitDate = repo?.pushed_at ? new Date(repo.pushed_at).toLocaleDateString() : 'N/A'
+  const description = repo ? repo.description || 'No description provided' : 'No data available'
 
   const handleOpenRepo = () => {
     if (repo) window.open(repo.html_url, '_blank', 'noopener,noreferrer')
@@ -61,10 +62,10 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
       <CardContent className={repo ? styles.content : ''}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-            {repo ? (
-              <Avatar src={repo.owner.avatar_url} alt={repo.owner.login} sx={{ width: '1.5rem', height: '1.5rem' }} />
-            ) : (
+            {isLoading ? (
               <Skeleton variant="circular" width="1.5rem" height="1.5rem" />
+            ) : (
+              <Avatar src={repo?.owner.avatar_url} alt={repo?.owner.login} sx={{ width: '1.5rem', height: '1.5rem' }} />
             )}
             <Typography variant="subtitle1" noWrap sx={{ fontWeight: 700 }}>
               {repoRef.full_name}
@@ -82,7 +83,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
         )}
 
         <Typography variant="body2" color="text.secondary" className={styles.description}>
-          {repo ? repo.description || 'No description provided' : <Skeleton variant="text" />}
+          {isLoading ? <Skeleton variant="text" /> : description}
         </Typography>
 
         <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'var(--color-text-secondary)' }}>
@@ -90,10 +91,9 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
         </Typography>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1.5 }}>
-          {repo ? (
+          {isLoading && <Skeleton variant="text" width="6rem" />}
+          {repo && (
             <RepoStatsRow stars={repo.stargazers_count} openIssues={repo.open_issues_count} forks={repo.forks_count} />
-          ) : (
-            <Skeleton variant="text" width="6rem" />
           )}
 
           <Button
@@ -102,7 +102,7 @@ function TrackedCard({ repoRef }: TrackedCardProps) {
             color="error"
             startIcon={<BookmarkRemoveIcon />}
             onClick={handleUntrack}
-            sx={{ textTransform: 'none' }}
+            sx={{ textTransform: 'none', ml: 'auto' }}
           >
             Untrack
           </Button>
