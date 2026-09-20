@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { TextField } from '@mui/material'
 import { INITIAL_VIEWPORTS } from 'storybook/viewport'
 import Navbar from './Navbar'
-import SearchBar from '../../../../apps/web/src/features/search/SearchBar/SearchBar'
 
 const meta: Meta<typeof Navbar> = {
   title: 'Components/Navbar',
@@ -17,7 +17,16 @@ const meta: Meta<typeof Navbar> = {
     return (
       <Navbar
         {...args}
-        searchSlot={<SearchBar value={searchInput} onChange={setSearchInput} />}
+        searchSlot={
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Search GitHub repositories..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            sx={{ maxWidth: '32rem' }}
+          />
+        }
       />
     )
   },
