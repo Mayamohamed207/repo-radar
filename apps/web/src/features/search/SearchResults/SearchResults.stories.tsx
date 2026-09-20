@@ -1,32 +1,13 @@
-import { useState, useEffect } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useArgs, useEffect } from 'storybook/preview-api'
 import SearchResults from './SearchResults'
 import { makeRepo } from '../../../test/makeRepo'
 
-const meta: Meta<typeof SearchResults> = {
-  title: 'Features/SearchResults',
-  component: SearchResults,
-  args: {
-    errorMessage: null,
-    sort: 'stars',
-    onSortChange: () => {},
-    onLoadMore: () => {},
-    onBack: () => {},
-  },
-  render: function Render(args) {
-    const [sort, setSort] = useState(args.sort)
-
-    useEffect(() => {
-      setSort(args.sort)
-    }, [args.sort])
-
-    return <SearchResults {...args} sort={sort} onSortChange={setSort} />
-  },
+const MESSAGES: Record<string, string | null> = {
+  None: null,
+  'Rate limit': 'GitHub search limit reached. Wait a moment and try again.',
+  'Network error': 'Something went wrong. Check your connection and try again.',
 }
-
-export default meta
-
-type Story = StoryObj<typeof SearchResults>
 
 const sampleResults = [
   makeRepo({ id: 1, full_name: 'facebook/react' }),
@@ -34,58 +15,69 @@ const sampleResults = [
   makeRepo({ id: 3, full_name: 'angular/angular', stargazers_count: 95000 }),
 ]
 
-export const WithResults: Story = {
+const meta: Meta<typeof SearchResults> = {
+  title: 'Features/SearchResults',
+  component: SearchResults,
   args: {
     status: 'success',
+    errorMessage: 'None',
     results: sampleResults,
     hasMore: true,
     loadingMore: false,
+    sort: 'stars',
+    onSortChange: () => {},
+    onLoadMore: () => {},
+    onBack: () => {},
+  },
+  argTypes: {
+    sort: { table: { disable: true } },
+    status: {
+      control: 'radio',
+      options: ['success', 'loading', 'error'],
+    },
+    errorMessage: {
+      control: 'select',
+      options: Object.keys(MESSAGES),
+      if: { arg: 'status', neq: 'loading' },
+    },
+    hasMore: { if: { arg: 'status', eq: 'success' } },
+    loadingMore: { if: { arg: 'hasMore', truthy: true } },
+  },
+  render: function Render(args) {
+    const [, updateArgs] = useArgs()
+
+    useEffect(() => {
+      if (args.status === 'error' && args.errorMessage === 'None') {
+        updateArgs({ errorMessage: 'Rate limit' })
+      }
+    }, [args.status, args.errorMessage])
+
+    return <SearchResults {...args} errorMessage={MESSAGES[args.errorMessage ?? 'None'] ?? null} />
   },
 }
 
+export default meta
+
+type Story = StoryObj<typeof SearchResults>
+
+export const WithResults: Story = {}
+
 export const NoResults: Story = {
-  args: {
-    status: 'success',
-    results: [],
-    hasMore: false,
-    loadingMore: false,
-  },
+  args: { results: [], hasMore: false },
 }
 
 export const Loading: Story = {
-  args: {
-    status: 'loading',
-    results: [],
-    hasMore: false,
-    loadingMore: false,
-  },
+  args: { status: 'loading' },
 }
 
 export const RateLimitError: Story = {
-  args: {
-    status: 'error',
-    errorMessage: 'GitHub search limit reached. Wait a moment and try again.',
-    results: [],
-    hasMore: false,
-    loadingMore: false,
-  },
+  args: { status: 'error', errorMessage: 'Rate limit' },
 }
 
 export const LoadingMore: Story = {
-  args: {
-    status: 'success',
-    results: sampleResults,
-    hasMore: true,
-    loadingMore: true,
-  },
+  args: { loadingMore: true },
 }
 
 export const LoadMoreFailed: Story = {
-  args: {
-    status: 'success',
-    errorMessage: 'GitHub search limit reached. Wait a moment and try again.',
-    results: sampleResults,
-    hasMore: true,
-    loadingMore: false,
-  },
+  args: { errorMessage: 'Rate limit' },
 }
